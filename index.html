@@ -750,6 +750,20 @@
       box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
     }
 
+    .slot-preview-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-violet-bright);
+      background: rgba(147, 51, 234, 0.14);
+      border: 1px solid rgba(192, 132, 252, 0.28);
+      margin-bottom: 14px;
+    }
+
     .form-actions {
       display: flex;
       flex-direction: column;
@@ -986,7 +1000,7 @@
   <!-- Pop-up après envoi de la demande -->
   <div id="booking-modal" class="booking-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
     <div class="booking-modal-card">
-      <div class="booking-modal-badge" id="booking-modal-badge">● Demande transmise</div>
+      <div class="booking-modal-badge" id="booking-modal-badge">● Ajouté à l'agenda CRM</div>
       <h2 id="booking-modal-title" class="booking-modal-title">Demande de rendez-vous envoyée</h2>
       <p id="booking-modal-copy" class="booking-modal-copy"></p>
       <div class="booking-modal-actions">
@@ -1217,7 +1231,7 @@
             <div class="section-kicker">Prise de Rendez-vous</div>
             <h2 class="section-title">Préparez votre demande d'entretien intérieur.</h2>
             <p class="section-desc">
-              Renseignez votre véhicule et votre formule pour envoyer votre réservation en quelques secondes.
+              Choisissez votre date et votre heure : le créneau s'inscrit automatiquement dans l'agenda du CRM dès l'envoi.
             </p>
           </div>
 
@@ -1249,9 +1263,20 @@
                 </div>
               </div>
 
-              <div class="field">
-                <label for="preferred-slot">Disponibilités souhaitées</label>
-                <input id="preferred-slot" name="preferredSlot" type="text" placeholder="Ex. Mercredi matin ou samedi après-midi" />
+              <div class="form-row-2">
+                <div class="field">
+                  <label for="rdv-date">Date souhaitée (Jour)</label>
+                  <input id="rdv-date" name="rdvDate" type="date" required />
+                </div>
+                <div class="field">
+                  <label for="rdv-time">Heure souhaitée</label>
+                  <input id="rdv-time" name="rdvTime" type="time" required />
+                </div>
+              </div>
+
+              <div id="slot-day-preview" class="slot-preview-pill">
+                <span>📅</span>
+                <span id="slot-day-text">Créneau agenda : sélectionnez une date et une heure</span>
               </div>
 
               <div class="field">
@@ -1260,7 +1285,7 @@
               </div>
 
               <div class="form-actions">
-                <button type="submit" id="submit-booking-btn" class="btn-primary">Envoyer la demande</button>
+                <button type="submit" id="submit-booking-btn" class="btn-primary">Envoyer et ajouter à l'agenda</button>
                 <button type="button" id="copy-summary-btn" class="btn-secondary">Copier le message</button>
               </div>
             </form>
@@ -1268,7 +1293,7 @@
             <aside class="glass-panel summary-card tilt-card apple-reveal">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
                 <div>
-                  <div style="font-weight: 700; font-size: 1.05rem; color: #fff;">Statut de réservation</div>
+                  <div style="font-weight: 700; font-size: 1.05rem; color: #fff;">Statut &amp; Agenda CRM</div>
                   <div style="font-size: 0.8rem; color: var(--text-secondary);">@wash_x_detailling · 100 % intérieur</div>
                 </div>
                 <div class="logo-frame" style="width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;">
@@ -1277,7 +1302,7 @@
                 </div>
               </div>
 
-              <div id="summary-output" class="summary-box">Remplissez le formulaire ci-contre puis validez pour transmettre votre demande de réservation.</div>
+              <div id="summary-output" class="summary-box">Sélectionnez une date et une heure puis validez : le rendez-vous apparaîtra dans l'agenda du CRM.</div>
 
               <div style="margin-top: 14px;">
                 <a href="https://www.instagram.com/wash_x_detailling/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="width: 100%;">
@@ -1462,6 +1487,35 @@
         });
       });
 
+      // Date + Heure -> Jour de la semaine & format CRM
+      const rdvDateInput = document.getElementById('rdv-date');
+      const rdvTimeInput = document.getElementById('rdv-time');
+      const slotDayText = document.getElementById('slot-day-text');
+
+      function formatSlotLabel(dateStr, timeStr) {
+        if (!dateStr) {
+          return timeStr
+            ? `Créneau agenda : heure ${timeStr} (choisissez une date)`
+            : 'Créneau agenda : sélectionnez une date et une heure';
+        }
+        const parts = dateStr.split('-').map(Number);
+        const dt = new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
+        const dayName = dt.toLocaleDateString('fr-FR', { weekday: 'long' });
+        const formattedDate = dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const capitalDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+        const timePart = timeStr ? ` à ${timeStr}` : '';
+        return `${capitalDay} ${formattedDate}${timePart}`;
+      }
+
+      function updateSlotPreview() {
+        if (!slotDayText) return;
+        const label = formatSlotLabel(rdvDateInput?.value || '', rdvTimeInput?.value || '');
+        slotDayText.textContent = label.startsWith('Créneau agenda') ? label : `Créneau agenda : ${label}`;
+      }
+
+      rdvDateInput?.addEventListener('change', updateSlotPreview);
+      rdvTimeInput?.addEventListener('change', updateSlotPreview);
+
       // Pop-up helpers
       const bookingModal = document.getElementById('booking-modal');
       const bookingModalBadge = document.getElementById('booking-modal-badge');
@@ -1471,7 +1525,7 @@
 
       function openBookingModal({ badge, title, message }) {
         if (!bookingModal) return;
-        if (bookingModalBadge) bookingModalBadge.textContent = badge || '● Demande transmise';
+        if (bookingModalBadge) bookingModalBadge.textContent = badge || '● Ajouté à l\'agenda CRM';
         if (bookingModalTitle) bookingModalTitle.textContent = title || 'Demande envoyée';
         if (bookingModalCopy) bookingModalCopy.textContent = message || '';
         bookingModal.classList.add('is-open');
@@ -1486,7 +1540,7 @@
         if (e.target === bookingModal) closeBookingModal();
       });
 
-      // Booking form submission -> Supabase wash_x_prestations
+      // Booking form submission -> Supabase wash_x_prestations (agenda CRM)
       const form = document.getElementById('booking-form');
       const submitBtn = document.getElementById('submit-booking-btn');
       const summaryOut = document.getElementById('summary-output');
@@ -1503,7 +1557,9 @@
         const contact = document.getElementById('client-contact').value.trim() || 'Non précisé';
         const vehicle = document.getElementById('vehicle-model').value.trim() || 'Non précisé';
         const formula = formulaSelect ? formulaSelect.value : 'Confort Intérieur (79 €)';
-        const slot = document.getElementById('preferred-slot').value.trim() || 'À définir';
+        const rdvDate = rdvDateInput?.value || '';
+        const rdvTime = rdvTimeInput?.value || '';
+        const slotText = rdvDate || rdvTime ? formatSlotLabel(rdvDate, rdvTime) : 'À définir';
         const notes = document.getElementById('interior-notes').value.trim() || 'Aucune précision particulière';
 
         return [
@@ -1511,7 +1567,7 @@
           `• Client : ${name} (${contact})`,
           `• Véhicule : ${vehicle}`,
           `• Formule : ${formula}`,
-          `• Créneaux : ${slot}`,
+          `• Créneau CRM : ${slotText}`,
           `• Détails intérieur : ${notes}`
         ].join('\n');
       }
@@ -1520,8 +1576,9 @@
         const baseUrl = (SUPABASE_CONFIG.url || '').trim().replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
         const apiKey = (SUPABASE_CONFIG.publishableKey || '').trim();
 
+        const slotLabel = formatSlotLabel(payload.rdvDate, payload.rdvTime);
         const combinedNotes = [
-          payload.preferredSlot ? `Créneaux souhaités : ${payload.preferredSlot}` : null,
+          payload.rdvDate || payload.rdvTime ? `Créneau demandé : ${slotLabel}` : null,
           payload.interiorNotes || null
         ].filter(Boolean).join(' | ') || null;
 
@@ -1535,9 +1592,9 @@
           tarif_eur: extractTarif(payload.formula),
           acompte_eur: 0,
           statut_paiement: 'À encaisser',
-          date_rdv: null,
-          heure_rdv: null,
-          statut_rdv: 'En attente',
+          date_rdv: payload.rdvDate || null,
+          heure_rdv: payload.rdvTime || null,
+          statut_rdv: 'Planifié',
           notes_techniques: combinedNotes,
           source_validation: 'Site Web'
         };
@@ -1569,42 +1626,46 @@
           clientContact: document.getElementById('client-contact')?.value.trim() || '',
           vehicleModel: document.getElementById('vehicle-model')?.value.trim() || '',
           formula: formulaSelect?.value || '',
-          preferredSlot: document.getElementById('preferred-slot')?.value.trim() || '',
+          rdvDate: rdvDateInput?.value || '',
+          rdvTime: rdvTimeInput?.value || '',
           interiorNotes: document.getElementById('interior-notes')?.value.trim() || ''
         };
 
+        const slotLabel = formatSlotLabel(payload.rdvDate, payload.rdvTime);
+
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.textContent = 'Envoi en cours...';
+          submitBtn.textContent = 'Ajout à l\'agenda...';
         }
 
         try {
           await sendToSupabase(payload);
           if (summaryOut) {
             summaryOut.classList.add('confirmed');
-            summaryOut.textContent = `✅ Votre demande a bien été enregistrée dans le CRM Wash X.\n\n${text}`;
+            summaryOut.textContent = `✅ Créneau inscrit dans l'agenda CRM (${slotLabel}).\n\n${text}`;
           }
           openBookingModal({
-            badge: '● Confirmation',
-            title: 'Demande de RDV envoyée',
-            message: `Merci ${payload.clientName || 'client'} ! Ta demande pour ${payload.vehicleModel || 'ton véhicule'} (${payload.formula}) a bien été enregistrée.`
+            badge: '● Ajouté à l\'agenda CRM',
+            title: 'Rendez-vous enregistré',
+            message: `Merci ${payload.clientName || 'client'} ! Ton créneau du ${slotLabel} pour ${payload.vehicleModel || 'ton véhicule'} (${payload.formula}) est bien noté dans l'agenda du CRM.`
           });
           form.reset();
+          updateSlotPreview();
         } catch (err) {
           console.error('Erreur Supabase :', err);
           if (summaryOut) {
             summaryOut.classList.remove('confirmed');
-            summaryOut.textContent = `⚠️ L'envoi direct vers la base n'a pas abouti (vérifie la politique INSERT RLS dans Supabase). Tu peux copier le récapitulatif ci-dessous :\n\n${text}`;
+            summaryOut.textContent = `⚠️ L'envoi direct vers la base n'a pas abouti (vérifie les colonnes date_rdv / heure_rdv et la politique INSERT RLS dans Supabase). Tu peux copier le récapitulatif ci-dessous :\n\n${text}`;
           }
           openBookingModal({
             badge: '● Attention',
             title: 'Envoi direct indisponible',
-            message: `La demande n'a pas pu être enregistrée directement. Tu peux copier le récapitulatif dans la zone de statut pour l'envoyer manuellement.`
+            message: `Le créneau n'a pas pu être ajouté directement à l'agenda. Tu peux copier le récapitulatif dans la zone de statut pour l'enregistrer manuellement.`
           });
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Envoyer la demande';
+            submitBtn.textContent = 'Envoyer et ajouter à l\'agenda';
           }
         }
       });
