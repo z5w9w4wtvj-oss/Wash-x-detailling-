@@ -657,7 +657,7 @@
       background: rgba(6, 10, 19, 0.82);
       color: #ffffff;
       font-family: inherit;
-      font-size: 16px; /* Prevents iOS auto-zoom on focus */
+      font-size: 16px;
       outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -1141,6 +1141,12 @@
 
   <script>
     (function () {
+      // Configuration Supabase (clé publique/publishable uniquement)
+      const SUPABASE_CONFIG = {
+        url: "TON_PROJECT_URL", // Ex. https://xxxxxxxxxxxx.supabase.co
+        publishableKey: "TA_CLE_PUBLISHABLE_SUPABASE" // Ex. sb_publis...
+      };
+
       const root = document.documentElement;
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
@@ -1253,11 +1259,17 @@
         });
       });
 
-      // Booking form submission
+      // Booking form submission -> Supabase wash_x_prestations
       const form = document.getElementById('booking-form');
       const submitBtn = document.getElementById('submit-booking-btn');
       const summaryOut = document.getElementById('summary-output');
       const copyBtn = document.getElementById('copy-summary-btn');
+
+      function extractTarif(formulaStr) {
+        const match = String(formulaStr || '').match(/(\d+(?:[.,]\d+)?)\s*€/);
+        if (!match) return 0;
+        return Number(match[1].replace(',', '.')) || 0;
+      }
 
       function buildSummary() {
         const name = document.getElementById('client-name').value.trim() || 'Non précisé';
@@ -1275,6 +1287,54 @@
           `• Créneaux : ${slot}`,
           `• Détails intérieur : ${notes}`
         ].join('\n');
+      }
+
+      async function sendToSupabase(payload) {
+        const baseUrl = (SUPABASE_CONFIG.url || '').trim().replace(/\/+$/, '');
+        const apiKey = (SUPABASE_CONFIG.publishableKey || '').trim();
+
+        if (!baseUrl || !apiKey || baseUrl.includes('TON_PROJECT_URL') || apiKey.includes('TA_CLE_PUBLISHABLE')) {
+          throw new Error('Configuration Supabase non renseignée');
+        }
+
+        const combinedNotes = [
+          payload.preferredSlot ? `Créneaux souhaités : ${payload.preferredSlot}` : null,
+          payload.interiorNotes || null
+        ].filter(Boolean).join(' | ') || null;
+
+        const row = {
+          client_nom: payload.clientName,
+          client_telephone: payload.clientContact || null,
+          vehicule: payload.vehicleModel || null,
+          departement: '49',
+          lieu_rdv: null,
+          formule: payload.formula || 'Confort Intérieur (79 €)',
+          tarif_eur: extractTarif(payload.formula),
+          acompte_eur: 0,
+          statut_paiement: 'À encaisser',
+          date_rdv: null,
+          heure_rdv: null,
+          statut_rdv: 'En attente',
+          notes_techniques: combinedNotes,
+          source_validation: 'Site Web'
+        };
+
+        const res = await fetch(`${baseUrl}/rest/v1/wash_x_prestations`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': apiKey,
+            'Authorization': `Bearer ${apiKey}`,
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify(row)
+        });
+
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(errText || `HTTP ${res.status}`);
+        }
+        return res.json();
       }
 
       form?.addEventListener('submit', async (e) => {
@@ -1296,28 +1356,16 @@
         }
 
         try {
-          const res = await fetch('/api/booking', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json();
-
-          if (res.ok && data.ok) {
-            if (summaryOut) {
-              summaryOut.classList.add('confirmed');
-              summaryOut.textContent = `✅ Votre réservation a bien été transmise.\n\n${text}`;
-            }
-          } else {
-            if (summaryOut) {
-              summaryOut.classList.remove('confirmed');
-              summaryOut.textContent = `⚠️ L'envoi automatique est momentanément indisponible. Vous pouvez copier le récapitulatif ci-dessous :\n\n${text}`;
-            }
+          await sendToSupabase(payload);
+          if (summaryOut) {
+            summaryOut.classList.add('confirmed');
+            summaryOut.textContent = `✅ Votre demande a bien été enregistrée dans le CRM Wash X.\n\n${text}`;
           }
+          form.reset();
         } catch (_) {
           if (summaryOut) {
             summaryOut.classList.remove('confirmed');
-            summaryOut.textContent = `⚠️ Problème de connexion. Vous pouvez copier le récapitulatif ci-dessous :\n\n${text}`;
+            summaryOut.textContent = `⚠️ L'envoi direct vers la base n'a pas abouti (vérifie tes clés Supabase ou la politique INSERT). Tu peux copier le récapitulatif ci-dessous :\n\n${text}`;
           }
         } finally {
           if (submitBtn) {
