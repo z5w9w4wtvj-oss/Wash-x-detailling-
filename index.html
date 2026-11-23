@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WASH X DETAILING — Nettoyage & Detailing 100% Intérieur</title>
+  <meta name="description" content="Wash X Detailing (@wash_x_detailling) : spécialiste du nettoyage et detailing 100% intérieur automobile (sans déplacement à domicile). Tissus, moquettes, cuir, plastiques mats, vitres intérieures et assainissement." />
+
+  <!-- Polices typographiques Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuration des tokens de design -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            abyss: '#05070C',
+            panel: '#0E1420',
+            electric: '#38BDF8',
+            ice: '#BAE6FD',
+          },
+          boxShadow: {
+            glow: '0 0 40px -6px rgba(56, 189, 248, 0.32)',
+            apple: '0 20px 46px -18px rgba(0, 0, 0, 0.82)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Base sombre futuriste et défilement fluide */
+    body {
+      background-color: #05070C;
+      color: #F4F8FC;
+      overflow-x: hidden;
+    }
+
+    /* Canvas des gouttes d'eau réalistes en arrière-plan */
+    #dropletCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header,
+    main,
+    footer {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Halo lumineux atmosphérique du hero */
+    .hero-atmosphere {
+      background:
+        radial-gradient(ellipse 78% 55% at 50% 6%, rgba(56, 189, 248, 0.22) 0%, rgba(14, 165, 233, 0.07) 48%, rgba(5, 7, 12, 0) 78%),
+        linear-gradient(180deg, rgba(10, 15, 26, 0.45) 0%, rgba(5, 7, 12, 0.84) 100%);
+    }
+
+    /* Cartes glassmorphiques */
+    .glass-card {
+      background: linear-gradient(155deg, rgba(16, 23, 36, 0.74) 0%, rgba(8, 12, 20, 0.88) 100%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .glass-featured {
+      background: linear-gradient(160deg, rgba(18, 34, 52, 0.86) 0%, rgba(8, 14, 24, 0.94) 100%);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    /* Intégration fluide de ./logo-washx.jpg sur fond sombre avec fondu des bords */
+    .logo-frame {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 48%, rgba(14, 22, 36, 0.92) 0%, rgba(5, 7, 12, 0.99) 100%);
+    }
+
+    .logo-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow:
+        inset 0 0 24px 6px rgba(5, 7, 12, 0.82),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      -webkit-mask-image: radial-gradient(ellipse 84% 82% at 50% 50%, #000 66%, rgba(0, 0, 0, 0.42) 86%, transparent 100%);
+      mask-image: radial-gradient(ellipse 84% 82% at 50% 50%, #000 66%, rgba(0, 0, 0, 0.42) 86%, transparent 100%);
+    }
+
+    .logo-placeholder {
+      display: none;
+    }
+
+    .logo-frame.is-missing .logo-img {
+      display: none;
+    }
+
+    .logo-frame.is-missing .logo-placeholder {
+      display: flex;
+    }
+
+    /* Chorégraphie Apple : inclinaison 3D et reflet spéculaire dynamique */
+    .apple-card {
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .apple-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(
+        440px circle at var(--shine-x, 50%) var(--shine-y, 20%),
+        rgba(186, 230, 253, 0.19),
+        rgba(56, 189, 248, 0.05) 44%,
+        transparent 75%
+      );
+    }
+
+    .apple-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Apparition fluide au défilement */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(24px) scale(0.985);
+      transition: opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1), transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Icône calendrier sombre */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) opacity(0.75);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-electric/30 selection:text-white">
+
+  <!-- Barre de progression de défilement en haut -->
+  <div class="fixed top-0 inset-x-0 z-[60] h-[2px] bg-white/5 pointer-events-none">
+    <div id="scrollProgressBar" class="h-full w-0 bg-gradient-to-r from-sky-400 via-electric to-ice transition-[width] duration-75"></div>
+  </div>
+
+  <!-- Arrière-plan interactif de gouttes d'eau réalistes -->
+  <canvas id="dropletCanvas" aria-hidden="true"></canvas>
+
+  <!-- ===================================================================== -->
+  <!-- 1. EN-TÊTE & NAVIGATION                                               -->
+  <!-- ===================================================================== -->
+  <header class="fixed top-0 inset-x-0 z-50 bg-abyss/75 backdrop-blur-xl border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
+
+      <!-- Identité & Logo réel ./logo-washx.jpg -->
+      <a href="#" class="flex items-center gap-3 group min-w-0">
+        <div class="logo-frame w-12 h-11 rounded-xl border border-white/15 group-hover:border-electric/60 transition-colors flex items-center justify-center shrink-0">
+          <img
+            src="./logo-washx.jpg"
+            alt="Logo WashX"
+            class="logo-img"
+            onload="this.parentElement.classList.remove('is-missing')"
+            onerror="this.parentElement.classList.add('is-missing')"
+          />
+          <span class="logo-placeholder flex-col items-center justify-center text-[9px] leading-tight font-semibold text-ice/85 px-1 text-center">
+            <span>logo-washx.jpg</span>
+          </span>
+        </div>
+        <div class="flex flex-col truncate">
+          <span class="font-display font-extrabold text-sm sm:text-lg tracking-wider text-white leading-none truncate">
+            WASH <span class="text-electric">X</span> DETAILING
+          </span>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-zinc-400 mt-0.5 truncate">@wash_x_detailling</span>
+        </div>
+      </a>
+
+      <!-- Liens de navigation -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-zinc-300">
+        <a href="#formules" class="hover:text-electric transition-colors">Formules Intérieur</a>
+        <a href="#etapes" class="hover:text-electric transition-colors">Étapes Intérieur</a>
+        <a href="#reservation" class="hover:text-electric transition-colors">Réserver</a>
+      </nav>
+
+      <!-- Sélecteur de mode des gouttes réalistes + CTA -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          type="button"
+          id="dropletModeBtn"
+          onclick="cycleDropletMode()"
+          title="Changer le mode des gouttes d'eau réalistes"
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-xl glass-card border border-white/15 text-xs font-medium text-ice hover:border-electric/60 active:scale-[0.98] transition-all"
+        >
+          <span class="w-2 h-2 rounded-full bg-electric"></span>
+          <span id="dropletModeLabel">Réaliste</span>
+        </button>
+
+        <a
+          href="#reservation"
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-electric text-abyss font-display font-bold text-xs sm:text-sm hover:bg-sky-300 active:scale-[0.98] transition-all shadow-glow"
+        >
+          <span>Demander un créneau</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- 2. HERO & VITRINE DU LOGO                                             -->
+  <!-- ===================================================================== -->
+  <main class="pt-16 sm:pt-20">
+    <section class="relative overflow-hidden hero-atmosphere border-b border-white/10">
+      <div id="heroParallaxLayer" class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-16 sm:pt-16 sm:pb-24 text-center transition-transform duration-150 ease-out">
+
+        <!-- Mise en valeur du logo ./logo-washx.jpg -->
+        <div class="logo-frame mx-auto mb-7 w-64 sm:w-80 aspect-[16/10] rounded-3xl border border-white/15 hover:border-electric/60 transition-all shadow-apple flex items-center justify-center">
+          <img
+            src="./logo-washx.jpg"
+            alt="Logo WashX"
+            class="logo-img"
+            onload="this.parentElement.classList.remove('is-missing')"
+            onerror="this.parentElement.classList.add('is-missing')"
+          />
+          <div class="logo-placeholder flex-col items-center justify-center gap-1.5 px-4 text-center">
+            <span class="px-2.5 py-1 rounded-full bg-electric/15 border border-electric/35 text-ice text-xs font-semibold">
+              Logo WashX
+            </span>
+            <p class="text-xs text-zinc-400">
+              Ajoutez <span class="text-zinc-200 font-medium">logo-washx.jpg</span> à côté de <span class="text-zinc-200 font-medium">index.html</span>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Badge 100% intérieur -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-electric/35 text-xs sm:text-sm font-medium text-ice mb-6 shadow-apple">
+          <span class="w-2 h-2 rounded-full bg-electric animate-pulse"></span>
+          <span>100% Nettoyage & Detailing Intérieur • Sans déplacement à domicile</span>
+        </div>
+
+        <!-- Titre principal -->
+        <h1 class="font-display font-extrabold text-3xl sm:text-5xl md:text-6xl text-white tracking-tight leading-[1.12] max-w-4xl mx-auto">
+          L'habitacle automobile
+          <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white via-ice to-electric mt-1">
+            100% intérieur, net et maîtrisé.
+          </span>
+        </h1>
+
+        <!-- Présentation claire -->
+        <p class="mt-5 sm:mt-6 text-base sm:text-lg text-zinc-300/90 max-w-2xl mx-auto leading-relaxed">
+          Bienvenue chez <strong class="text-white font-semibold">Wash X Detailing</strong> (<span class="text-ice">@wash_x_detailling</span>). Nous réalisons uniquement le nettoyage et le detailing de l'intérieur de votre véhicule : moquettes, tissus, cuir, plastiques mats, vitres intérieures et assainissement, sans déplacement à domicile.
+        </p>
+
+        <!-- Boutons d'action -->
+        <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4">
+          <a
+            href="#formules"
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white text-abyss font-display font-bold text-sm sm:text-base hover:bg-ice transition-all shadow-apple"
+          >
+            Voir les formules intérieur
+          </a>
+          <a
+            href="#reservation"
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl glass-card text-white border border-white/15 font-display font-bold text-sm sm:text-base hover:border-electric/60 transition-all"
+          >
+            Réserver un créneau
+          </a>
+        </div>
+
+        <!-- Points forts 100% intérieur -->
+        <div class="mt-12 sm:mt-16 pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-left sm:text-center">
+          <div class="apple-card relative flex sm:flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-white/10 hover:border-electric/45">
+            <div class="w-9 h-9 rounded-xl bg-electric/15 border border-electric/30 flex items-center justify-center text-electric shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+            </div>
+            <span class="text-xs sm:text-sm font-medium text-zinc-100">Exclusivement intérieur • Pas de domicile</span>
+          </div>
+
+          <div class="apple-card relative flex sm:flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-white/10 hover:border-electric/45">
+            <div class="w-9 h-9 rounded-xl bg-electric/15 border border-electric/30 flex items-center justify-center text-electric shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+              </svg>
+            </div>
+            <span class="text-xs sm:text-sm font-medium text-zinc-100">Extraction tissus, cuir & plastiques mats</span>
+          </div>
+
+          <div class="apple-card relative flex sm:flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-white/10 hover:border-electric/45">
+            <div class="w-9 h-9 rounded-xl bg-electric/15 border border-electric/30 flex items-center justify-center text-electric shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+            </div>
+            <span class="text-xs sm:text-sm font-medium text-zinc-100">Réservation rapide sur créneau</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 3. FORMULES 100% INTÉRIEUR                                            -->
+    <!-- ===================================================================== -->
+    <section id="formules" class="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto reveal-item">
+        <span class="text-xs font-display font-bold uppercase tracking-[0.2em] text-electric">Tarifs clairs • 100% Intérieur</span>
+        <h2 class="mt-2 font-display font-extrabold text-2xl sm:text-4xl text-white">
+          Formules de Nettoyage Intérieur
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-zinc-300/85">
+          Choisissez la formule adaptée à l'état de votre habitacle. Chaque sélection remplit automatiquement le formulaire ci-dessous.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+
+        <!-- FORMULE 1 : L'Essentiel Intérieur -->
+        <article class="apple-card reveal-item relative rounded-3xl glass-card border border-white/10 p-6 sm:p-8 flex flex-col justify-between hover:border-electric/50 shadow-apple">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Formule 01</span>
+              <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-200">100% Intérieur</span>
+            </div>
+            <h3 class="mt-3 font-display font-bold text-2xl text-white">L'Essentiel Intérieur</h3>
+            <div class="mt-4 flex items-baseline gap-1.5">
+              <span class="font-display font-extrabold text-4xl sm:text-5xl text-white">49 €</span>
+              <span class="text-xs text-zinc-400">/ habitacle</span>
+            </div>
+            <p class="mt-3 text-xs sm:text-sm text-zinc-300/85">
+              L'entretien intérieur régulier pour redonner clarté, propreté et fraîcheur à l'habitacle.
+            </p>
+
+            <ul class="mt-6 pt-6 border-t border-white/10 space-y-3.5 text-sm text-zinc-200">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Aspiration complète sièges, moquettes, tapis et coffre</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Nettoyage des plastiques mats et console centrale</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Dégraissage et finition des vitres intérieures sans traces</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Assainissement léger de l'habitacle</span>
+              </li>
+            </ul>
+          </div>
+
+          <button
+            type="button"
+            onclick="selectInteriorPackage('L\'Essentiel Intérieur — 49 €')"
+            class="mt-8 w-full py-3.5 px-5 rounded-xl bg-white/5 border border-white/15 text-white font-display font-bold text-sm hover:border-electric hover:text-electric hover:bg-electric/10 active:scale-[0.99] transition-all"
+          >
+            Choisir L'Essentiel Intérieur
+          </button>
+        </article>
+
+        <!-- FORMULE 2 : Confort Intérieur -->
+        <article class="apple-card reveal-item relative rounded-3xl glass-featured border-2 border-electric p-6 sm:p-8 flex flex-col justify-between shadow-glow lg:-translate-y-2">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
+            <span class="px-4 py-1 rounded-full bg-electric text-abyss font-display font-extrabold text-xs uppercase tracking-wider shadow-md">
+              Plus populaire
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold uppercase tracking-wider text-electric">Formule 02</span>
+              <span class="px-2.5 py-1 rounded-lg bg-electric/15 border border-electric/30 text-xs text-electric font-medium">Injection-extraction</span>
+            </div>
+            <h3 class="mt-3 font-display font-bold text-2xl text-white">Confort Intérieur</h3>
+            <div class="mt-4 flex items-baseline gap-1.5">
+              <span class="font-display font-extrabold text-4xl sm:text-5xl text-white">69 €</span>
+              <span class="text-xs text-zinc-400">/ habitacle</span>
+            </div>
+            <p class="mt-3 text-xs sm:text-sm text-zinc-200">
+              Traitement en profondeur des tissus et moquettes avec soin des cuirs et plastiques mats.
+            </p>
+
+            <ul class="mt-6 pt-6 border-t border-white/10 space-y-3.5 text-sm text-zinc-100">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span class="font-medium text-white">Tout L'Essentiel Intérieur inclus</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Injection-extraction des sièges tissus et moquettes</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Nettoyage et soin des selleries cuir & plastiques mats</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Détail des aérateurs, contre-portes et seuils intérieurs</span>
+              </li>
+            </ul>
+          </div>
+
+          <button
+            type="button"
+            onclick="selectInteriorPackage('Confort Intérieur — 69 €')"
+            class="mt-8 w-full py-3.5 px-5 rounded-xl bg-electric text-abyss font-display font-extrabold text-sm hover:bg-sky-300 active:scale-[0.99] transition-all shadow-glow"
+          >
+            Choisir Confort Intérieur
+          </button>
+        </article>
+
+        <!-- FORMULE 3 : Intégrale Intérieur -->
+        <article class="apple-card reveal-item relative rounded-3xl glass-card border border-white/10 p-6 sm:p-8 flex flex-col justify-between hover:border-electric/50 shadow-apple">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Formule 03</span>
+              <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-200">Habitacle Complet</span>
+            </div>
+            <h3 class="mt-3 font-display font-bold text-2xl text-white">Intégrale Intérieur</h3>
+            <div class="mt-4 flex items-baseline gap-1.5">
+              <span class="font-display font-extrabold text-4xl sm:text-5xl text-white">89 €</span>
+              <span class="text-xs text-zinc-400">/ habitacle</span>
+            </div>
+            <p class="mt-3 text-xs sm:text-sm text-zinc-300/85">
+              Remise à neuf intérieure complète incluant plafonnier et neutralisation des odeurs.
+            </p>
+
+            <ul class="mt-6 pt-6 border-t border-white/10 space-y-3.5 text-sm text-zinc-200">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Injection-extraction approfondie moquettes, sièges et coffre</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Nettoyage délicat du plafonnier et pare-soleil</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Assainissement complet & neutralisation des odeurs tenaces</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-electric shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Finition soignée cuir, plastiques mats et vitres</span>
+              </li>
+            </ul>
+          </div>
+
+          <button
+            type="button"
+            onclick="selectInteriorPackage('Intégrale Intérieur — 89 €')"
+            class="mt-8 w-full py-3.5 px-5 rounded-xl bg-white/5 border border-white/15 text-white font-display font-bold text-sm hover:border-electric hover:text-electric hover:bg-electric/10 active:scale-[0.99] transition-all"
+          >
+            Choisir Intégrale Intérieur
+          </button>
+        </article>
+
+      </div>
+
+      <p class="mt-8 text-center text-xs text-zinc-400 max-w-3xl mx-auto leading-relaxed reveal-item">
+        Prestations 100% intérieur (aucun déplacement à domicile et aucun lavage extérieur). Sur rendez-vous. Un complément peut être indiqué si l'habitacle présente un encrassement extrême.
+      </p>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 4. ÉTAPES INTERACTIVES DU PROCESS INTÉRIEUR                           -->
+    <!-- ===================================================================== -->
+    <section id="etapes" class="py-16 sm:py-20 border-y border-white/10 px-4 sm:px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto reveal-item">
+          <span class="text-xs font-display font-bold uppercase tracking-[0.2em] text-electric">Protocole habitacle</span>
+          <h2 class="mt-2 font-display font-extrabold text-2xl sm:text-4xl text-white">
+            Les étapes de votre soin intérieur
+          </h2>
+          <p class="mt-3 text-sm sm:text-base text-zinc-300/85">
+            Sélectionnez une étape pour voir comment chaque zone intérieure est traitée.
+          </p>
+        </div>
+
+        <!-- Onglets interactifs -->
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-2.5 reveal-item" role="tablist" aria-label="Étapes du nettoyage intérieur">
+          <button
+            type="button"
+            data-step="0"
+            onclick="setActiveCareStep(0)"
+            class="care-step-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-display font-bold bg-electric text-abyss transition-all"
+          >
+            01 • Tissus & Moquettes
+          </button>
+          <button
+            type="button"
+            data-step="1"
+            onclick="setActiveCareStep(1)"
+            class="care-step-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-display font-bold glass-card border border-white/15 text-zinc-200 hover:border-electric/50 transition-all"
+          >
+            02 • Cuir & Plastiques Mats
+          </button>
+          <button
+            type="button"
+            data-step="2"
+            onclick="setActiveCareStep(2)"
+            class="care-step-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-display font-bold glass-card border border-white/15 text-zinc-200 hover:border-electric/50 transition-all"
+          >
+            03 • Plafonnier, Vitres & Odeurs
+          </button>
+        </div>
+
+        <!-- Panneau détaillé de l'étape active -->
+        <div id="careStepPanel" class="mt-6 rounded-3xl glass-card border border-white/15 p-6 sm:p-8 shadow-apple reveal-item">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="max-w-2xl">
+              <span id="careStepTag" class="text-xs font-display font-extrabold uppercase tracking-wider text-electric">
+                Étape 01 • Aspiration & Injection-Extraction
+              </span>
+              <h3 id="careStepTitle" class="mt-2 font-display font-bold text-xl sm:text-2xl text-white">
+                Sièges tissus, moquettes, tapis et coffre
+              </h3>
+              <p id="careStepDesc" class="mt-2.5 text-sm text-zinc-300 leading-relaxed">
+                Décrassage mécanique, aspiration des zones profondes et glissières, puis injection-extraction ciblée pour décoller taches, poussières incrustées et résidus d'usage quotidien.
+              </p>
+            </div>
+            <div class="shrink-0">
+              <a
+                href="#reservation"
+                class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-white text-abyss font-display font-bold text-xs sm:text-sm hover:bg-ice transition-all"
+              >
+                Planifier cet intérieur
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grille récapitulative des 3 étapes -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div onclick="setActiveCareStep(0)" class="apple-card reveal-item cursor-pointer relative p-6 rounded-2xl glass-card border border-white/10 hover:border-electric/45">
+            <span class="inline-block text-xs font-display font-extrabold uppercase tracking-wider text-electric mb-2">01 • Tissus & Moquettes</span>
+            <h3 class="font-display font-bold text-base text-white">Aspiration & injection-extraction</h3>
+            <p class="mt-2 text-xs sm:text-sm text-zinc-300/85 leading-relaxed">
+              Élimination des saletés profondes sur sièges tissus, tapis, moquettes et coffre.
+            </p>
+          </div>
+
+          <div onclick="setActiveCareStep(1)" class="apple-card reveal-item cursor-pointer relative p-6 rounded-2xl glass-card border border-white/10 hover:border-electric/45">
+            <span class="inline-block text-xs font-display font-extrabold uppercase tracking-wider text-electric mb-2">02 • Cuir & Plastiques Mats</span>
+            <h3 class="font-display font-bold text-base text-white">Finition propre sans brillance grasse</h3>
+            <p class="mt-2 text-xs sm:text-sm text-zinc-300/85 leading-relaxed">
+              Soin du cuir, des plastiques mats, de la console, des boutons et des aérateurs.
+            </p>
+          </div>
+
+          <div onclick="setActiveCareStep(2)" class="apple-card reveal-item cursor-pointer relative p-6 rounded-2xl glass-card border border-white/10 hover:border-electric/45">
+            <span class="inline-block text-xs font-display font-extrabold uppercase tracking-wider text-electric mb-2">03 • Plafonnier, Vitres & Odeurs</span>
+            <h3 class="font-display font-bold text-base text-white">Clarté & air intérieur assaini</h3>
+            <p class="mt-2 text-xs sm:text-sm text-zinc-300/85 leading-relaxed">
+              Traitement doux du plafonnier, vitres intérieures nettes et neutralisation des odeurs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 5. FORMULAIRE DE DEMANDE DE CRÉNEAU INTÉRIEUR                         -->
+    <!-- ===================================================================== -->
+    <section id="reservation" class="py-16 sm:py-24 px-4 sm:px-6 max-w-4xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto reveal-item">
+        <span class="text-xs font-display font-bold uppercase tracking-[0.2em] text-electric">Réservation 100% intérieur</span>
+        <h2 class="mt-2 font-display font-extrabold text-2xl sm:text-4xl text-white">
+          Demander un créneau intérieur
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-zinc-300/85">
+          Renseignez votre véhicule et votre formule intérieure (sans déplacement à domicile) pour générer votre demande et l'envoyer via WhatsApp, E-mail ou Instagram <span class="text-ice">@wash_x_detailling</span>.
+        </p>
+      </div>
+
+      <div class="mt-10 rounded-3xl glass-card border border-white/15 p-6 sm:p-10 shadow-apple reveal-item">
+        <form id="interiorBookingForm" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="clientName" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                Prénom / Nom *
+              </label>
+              <input
+                type="text"
+                id="clientName"
+                name="clientName"
+                required
+                placeholder="Ex. Lucas Martin"
+                class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-electric transition-colors"
+              />
+            </div>
+
+            <div>
+              <label for="clientContact" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                Téléphone ou Instagram *
+              </label>
+              <input
+                type="text"
+                id="clientContact"
+                name="clientContact"
+                required
+                placeholder="Ex. 06 12 34 56 78 ou @pseudo"
+                class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-electric transition-colors"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="vehicleModel" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                Modèle & sellerie *
+              </label>
+              <input
+                type="text"
+                id="vehicleModel"
+                name="vehicleModel"
+                required
+                placeholder="Ex. Peugeot 308 (tissus) / Audi Q3 (cuir)"
+                class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-electric transition-colors"
+              />
+            </div>
+
+            <div>
+              <label for="selectedPackage" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                Formule intérieur *
+              </label>
+              <select
+                id="selectedPackage"
+                name="selectedPackage"
+                required
+                class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white text-sm focus:outline-none focus:border-electric transition-colors"
+              >
+                <option value="Confort Intérieur — 69 €">Confort Intérieur — 69 € (Plus populaire)</option>
+                <option value="L'Essentiel Intérieur — 49 €">L'Essentiel Intérieur — 49 €</option>
+                <option value="Intégrale Intérieur — 89 €">Intégrale Intérieur — 89 €</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="bookingDate" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                Date souhaitée *
+              </label>
+              <input
+                type="date"
+                id="bookingDate"
+                name="bookingDate"
+                required
+                class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white text-sm focus:outline-none focus:border-electric transition-colors"
+              />
+            </div>
+
+            <div>
+              <label for="bookingWindow" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                Créneau préféré *
+              </label>
+              <select
+                id="bookingWindow"
+                name="bookingWindow"
+                required
+                class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white text-sm focus:outline-none focus:border-electric transition-colors"
+              >
+                <option value="Matin (08h30 - 12h30)">Matin (08h30 - 12h30)</option>
+                <option value="Après-midi (13h30 - 18h30)">Après-midi (13h30 - 18h30)</option>
+                <option value="Flexible sur la journée">Flexible sur la journée</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="interiorNotes" class="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+              Détails de l'habitacle (optionnel)
+            </label>
+            <textarea
+              id="interiorNotes"
+              name="interiorNotes"
+              rows="3"
+              placeholder="Ex. Taches sur sièges/moquettes, odeurs, poils, préférences..."
+              class="w-full px-4 py-3 rounded-xl bg-abyss/80 border border-white/15 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-electric transition-colors resize-none"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-4 px-6 rounded-xl bg-electric text-abyss font-display font-extrabold text-sm sm:text-base hover:bg-sky-300 active:scale-[0.99] transition-all shadow-glow flex items-center justify-center gap-2"
+          >
+            <span>Générer ma demande de créneau</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+        </form>
+
+        <!-- Récapitulatif instantané -->
+        <div id="bookingSummaryBox" class="hidden mt-8 pt-8 border-t border-white/10">
+          <div class="rounded-2xl bg-abyss/90 border border-electric/50 p-5 sm:p-7 shadow-glow">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  Récapitulatif prêt
+                </span>
+                <h3 class="mt-2 font-display font-bold text-xl text-white">
+                  Demande Wash X Detailing (100% Intérieur)
+                </h3>
+              </div>
+              <button type="button" onclick="hideSummaryBox()" class="text-xs text-zinc-400 hover:text-white underline">
+                Modifier
+              </button>
+            </div>
+
+            <pre
+              id="summaryTextOutput"
+              class="mt-4 p-4 rounded-xl glass-card border border-white/10 text-xs sm:text-sm text-zinc-200 whitespace-pre-wrap font-sans leading-relaxed"
+            ></pre>
+
+            <p id="webhookStatusMessage" class="hidden mt-3 text-xs text-electric font-medium"></p>
+
+            <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                type="button"
+                onclick="copySummaryText()"
+                class="py-3 px-4 rounded-xl bg-white text-abyss font-display font-bold text-xs sm:text-sm hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+              >
+                <span id="copySummaryLabel">Copier le message</span>
+              </button>
+
+              <a
+                id="whatsappActionLink"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="py-3 px-4 rounded-xl bg-emerald-500/15 border border-emerald-500/35 text-emerald-300 font-display font-bold text-xs sm:text-sm hover:bg-emerald-500/25 transition-all flex items-center justify-center gap-2"
+              >
+                <span>WhatsApp</span>
+              </a>
+
+              <a
+                id="emailActionLink"
+                href="#"
+                class="py-3 px-4 rounded-xl glass-card border border-white/15 text-zinc-200 font-display font-bold text-xs sm:text-sm hover:border-electric/50 transition-all flex items-center justify-center gap-2"
+              >
+                <span>E-mail</span>
+              </a>
+            </div>
+
+            <p class="mt-4 text-[11px] text-zinc-400 text-center">
+              Vous pouvez aussi coller ce texte en message privé sur Instagram
+              <a href="https://www.instagram.com/wash_x_detailling/" target="_blank" rel="noopener noreferrer" class="text-electric hover:underline">@wash_x_detailling</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- 6. FOOTER                                                             -->
+  <!-- ===================================================================== -->
+  <footer class="border-t border-white/10 bg-abyss/85 backdrop-blur-xl py-10 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+
+      <div class="flex flex-col sm:flex-row items-center gap-3.5">
+        <div class="logo-frame w-12 h-11 rounded-xl border border-white/15 flex items-center justify-center shrink-0">
+          <img
+            src="./logo-washx.jpg"
+            alt="Logo WashX"
+            class="logo-img"
+            onload="this.parentElement.classList.remove('is-missing')"
+            onerror="this.parentElement.classList.add('is-missing')"
+          />
+          <span class="logo-placeholder text-[9px] font-semibold text-ice/85 px-1">logo-washx.jpg</span>
+        </div>
+        <div>
+          <div class="font-display font-extrabold text-base tracking-wider text-white">
+            WASH <span class="text-electric">X</span> DETAILING
+          </div>
+          <p class="mt-0.5 text-xs text-zinc-400">
+            Nettoyage & detailing 100% intérieur • Sans déplacement à domicile
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:items-end gap-1.5">
+        <a
+          href="https://www.instagram.com/wash_x_detailling/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-xs font-medium text-zinc-300 hover:text-electric transition-colors"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          <span>Instagram : @wash_x_detailling</span>
+        </a>
+        <p class="text-[11px] text-zinc-500">
+          © <span id="footerYear"></span> Wash X Detailing. Tous droits réservés.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- SCRIPTS : GOUTTES RÉALISTES + MOUVEMENT APPLE + RÉSERVATION           -->
+  <!-- ===================================================================== -->
+  <script>
+    /**
+     * Hooks optionnels pour la réception des demandes
+     */
+    const OWNER_WHATSAPP = ""; // Exemple : "33612345678"
+    const OWNER_EMAIL = "";    // Exemple : "contact@exemple.fr"
+    const WEBHOOK_URL = "";    // Exemple : URL webhook (Make, n8n, Formspree...)
+
+    const DROPLET_MODES = [
+      { key: "realistic", label: "Réaliste", multiplier: 1.0 },
+      { key: "intense", label: "Intense", multiplier: 1.55 },
+      { key: "soft", label: "Doux", multiplier: 0.55 }
+    ];
+    let dropletModeIndex = 0;
+    let dropletController = null;
+    let currentBookingSummary = "";
+
+    function cycleDropletMode() {
+      dropletModeIndex = (dropletModeIndex + 1) % DROPLET_MODES.length;
+      const mode = DROPLET_MODES[dropletModeIndex];
+      const labelEl = document.getElementById("dropletModeLabel");
+      if (labelEl) labelEl.textContent = mode.label;
+      if (dropletController) dropletController.setMultiplier(mode.multiplier);
+    }
+
+    /**
+     * Gouttes d'eau réalistes & chorégraphie de mouvement fluide
+     */
+    (function initRealisticDropletsAndMotion() {
+      const canvas = document.getElementById("dropletCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      let width = 0;
+      let height = 0;
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let densityMultiplier = 1.0;
+
+      const pointer = {
+        targetX: -9999,
+        targetY: -9999,
+        x: -9999,
+        y: -9999,
+        vx: 0,
+        vy: 0,
+        active: false
+      };
+
+      let targetScroll = window.scrollY || 0;
+      let smoothScroll = targetScroll;
+      let scrollDelta = 0;
+
+      const droplets = [];
+      const mistDrops = [];
+      const ripples = [];
+
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function createDroplet(x, y, burst = false) {
+        const radius = burst ? 4.5 + Math.random() * 6.5 : 5.5 + Math.random() * 14.5;
+        return {
+          x: x ?? Math.random() * width,
+          y: y ?? Math.random() * height,
+          vx: (Math.random() - 0.5) * (burst ? 3.8 : 0.42),
+          vy: (Math.random() - 0.5) * (burst ? 3.8 : 0.42) + (burst ? 0.4 : 0.14),
+          r: radius,
+          phase: Math.random() * Math.PI * 2,
+          phaseSpeed: 0.02 + Math.random() * 0.022,
+          wobble: 0.055 + Math.random() * 0.075,
+          opacity: 0.48 + Math.random() * 0.34
+        };
+      }
+
+      function createMistDrop() {
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: 0.12 + Math.random() * 0.28,
+          r: 1.1 + Math.random() * 2.1,
+          alpha: 0.16 + Math.random() * 0.3
+        };
+      }
+
+      function rebuildParticles() {
+        droplets.length = 0;
+        mistDrops.length = 0;
+
+        const baseCount = Math.max(18, Math.min(54, Math.floor((width * height) / 30000)));
+        const count = Math.max(10, Math.round(baseCount * densityMultiplier));
+        for (let i = 0; i < count; i++) {
+          droplets.push(createDroplet());
+        }
+
+        const mistCount = Math.max(15, Math.round(48 * densityMultiplier));
+        for (let i = 0; i < mistCount; i++) {
+          mistDrops.push(createMistDrop());
+        }
+      }
+
+      function spawnRipple(x, y, intensity = 1) {
+        ripples.push({
+          x,
+          y,
+          r: 6,
+          maxR: 120 * intensity + 55,
+          alpha: 0.52 * intensity,
+          lineWidth: 1.45 * intensity
+        });
+        if (ripples.length > 24) ripples.shift();
+      }
+
+      function updatePointerPosition(x, y) {
+        if (!pointer.active) {
+          pointer.x = x;
+          pointer.y = y;
+        }
+        pointer.targetX = x;
+        pointer.targetY = y;
+        pointer.active = true;
+      }
+
+      function triggerTapBurst(x, y) {
+        updatePointerPosition(x, y);
+        spawnRipple(x, y, 1.35);
+
+        for (let i = 0; i < 5; i++) {
+          const angle = (Math.PI * 2 * i) / 5 + Math.random() * 0.35;
+          const speed = 1.6 + Math.random() * 2.2;
+          const drop = createDroplet(x + Math.cos(angle) * 10, y + Math.sin(angle) * 10, true);
+          drop.vx = Math.cos(angle) * speed;
+          drop.vy = Math.sin(angle) * speed;
+          droplets.push(drop);
+          if (droplets.length > 98) droplets.shift();
+        }
+      }
+
+      window.addEventListener("mousemove", (e) => updatePointerPosition(e.clientX, e.clientY), { passive: true });
+      window.addEventListener("mousedown", (e) => triggerTapBurst(e.clientX, e.clientY), { passive: true });
+      window.addEventListener("touchmove", (e) => {
+        if (e.touches && e.touches[0]) {
+          updatePointerPosition(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+      window.addEventListener("touchstart", (e) => {
+        if (e.touches && e.touches[0]) {
+          triggerTapBurst(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+      window.addEventListener("mouseleave", () => {
+        pointer.active = false;
+      });
+
+      window.addEventListener("scroll", () => {
+        targetScroll = window.scrollY || 0;
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const progress = Math.min(100, Math.max(0, (targetScroll / maxScroll) * 100));
+        const bar = document.getElementById("scrollProgressBar");
+        if (bar) bar.style.width = `${progress}%`;
+      }, { passive: true });
+
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        rebuildParticles();
+      });
+
+      function drawRealisticDroplet(d) {
+        ctx.save();
+        ctx.translate(d.x, d.y);
+
+        const speedAngle = Math.atan2(d.vy, d.vx);
+        const stretch = Math.min(1.16, 1 + Math.hypot(d.vx, d.vy) * 0.032);
+        ctx.rotate(speedAngle);
+        ctx.scale(stretch, 2 - stretch);
+        ctx.rotate(-speedAngle);
+
+        // Contour organique sous tension superficielle
+        const segments = 24;
+        ctx.beginPath();
+        for (let i = 0; i <= segments; i++) {
+          const theta = (i / segments) * Math.PI * 2;
+          const wave =
+            1 +
+            Math.sin(theta * 2 + d.phase) * d.wobble +
+            Math.cos(theta * 3 - d.phase * 0.8) * (d.wobble * 0.42);
+          const rad = d.r * wave;
+          const px = Math.cos(theta) * rad;
+          const py = Math.sin(theta) * rad;
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+
+        // Réfraction interne bleu glacé / cyan
+        const refractionGrad = ctx.createRadialGradient(
+          -d.r * 0.28,
+          -d.r * 0.32,
+          d.r * 0.08,
+          d.r * 0.1,
+          d.r * 0.12,
+          d.r * 1.05
+        );
+        refractionGrad.addColorStop(0, `rgba(240, 249, 255, ${d.opacity * 0.44})`);
+        refractionGrad.addColorStop(0.45, `rgba(56, 189, 248, ${d.opacity * 0.25})`);
+        refractionGrad.addColorStop(0.82, `rgba(14, 165, 233, ${d.opacity * 0.36})`);
+        refractionGrad.addColorStop(1, `rgba(186, 230, 253, ${d.opacity * 0.66})`);
+
+        ctx.fillStyle = refractionGrad;
+        ctx.fill();
+
+        // Ménisque lumineux
+        ctx.strokeStyle = `rgba(224, 242, 254, ${d.opacity * 0.74})`;
+        ctx.lineWidth = Math.max(0.8, d.r * 0.075);
+        ctx.stroke();
+
+        // Caustique interne en bas à droite
+        const causticGrad = ctx.createRadialGradient(
+          d.r * 0.35,
+          d.r * 0.38,
+          d.r * 0.04,
+          d.r * 0.35,
+          d.r * 0.38,
+          d.r * 0.55
+        );
+        causticGrad.addColorStop(0, `rgba(186, 230, 253, ${d.opacity * 0.66})`);
+        causticGrad.addColorStop(1, "rgba(186, 230, 253, 0)");
+        ctx.fillStyle = causticGrad;
+        ctx.beginPath();
+        ctx.arc(d.r * 0.35, d.r * 0.38, d.r * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Reflet spéculaire principal et secondaire en haut à gauche
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.95, d.opacity * 1.12)})`;
+        ctx.beginPath();
+        ctx.ellipse(-d.r * 0.36, -d.r * 0.38, d.r * 0.24, d.r * 0.12, -0.68, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.85, d.opacity * 0.9)})`;
+        ctx.beginPath();
+        ctx.arc(-d.r * 0.14, -d.r * 0.52, Math.max(0.9, d.r * 0.085), 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      function bindAppleCards() {
+        const cards = document.querySelectorAll(".apple-card");
+        cards.forEach((card) => {
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const nx = (e.clientX - rect.left) / rect.width;
+            const ny = (e.clientY - rect.top) / rect.height;
+            const rotY = (nx - 0.5) * 6;
+            const rotX = (0.5 - ny) * 6;
+
+            card.style.setProperty("--shine-x", `${(nx * 100).toFixed(1)}%`);
+            card.style.setProperty("--shine-y", `${(ny * 100).toFixed(1)}%`);
+            card.style.transform = `perspective(920px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
+          }, { passive: true });
+
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "";
+          });
+        });
+      }
+
+      function animateFrame() {
+        ctx.clearRect(0, 0, width, height);
+
+        const prevScroll = smoothScroll;
+        smoothScroll += (targetScroll - smoothScroll) * 0.11;
+        scrollDelta = smoothScroll - prevScroll;
+
+        if (pointer.active) {
+          pointer.vx = (pointer.targetX - pointer.x) * 0.18;
+          pointer.vy = (pointer.targetY - pointer.y) * 0.18;
+          pointer.x += pointer.vx;
+          pointer.y += pointer.vy;
+        }
+
+        // Parallaxe douce sur le hero
+        const heroEl = document.getElementById("heroParallaxLayer");
+        if (heroEl) {
+          const offsetY = Math.min(40, Math.max(-22, smoothScroll * 0.13));
+          const scaleFactor = Math.max(0.965, 1 - smoothScroll * 0.00011);
+          heroEl.style.transform = `translate3d(0, ${offsetY.toFixed(1)}px, 0) scale(${scaleFactor.toFixed(4)})`;
+        }
+
+        // Halo de suivi autour du curseur
+        if (pointer.active && pointer.x > -1000) {
+          const glow = ctx.createRadialGradient(pointer.x, pointer.y, 4, pointer.x, pointer.y, 145);
+          glow.addColorStop(0, "rgba(186, 230, 253, 0.13)");
+          glow.addColorStop(0.55, "rgba(56, 189, 248, 0.045)");
+          glow.addColorStop(1, "rgba(56, 189, 248, 0)");
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(pointer.x, pointer.y, 145, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Ondes au clic / toucher
+        for (let i = ripples.length - 1; i >= 0; i--) {
+          const rp = ripples[i];
+          rp.r += 2.2;
+          rp.alpha *= 0.96;
+          if (rp.alpha <= 0.015 || rp.r >= rp.maxR) {
+            ripples.splice(i, 1);
+            continue;
+          }
+          ctx.strokeStyle = `rgba(186, 230, 253, ${rp.alpha})`;
+          ctx.lineWidth = rp.lineWidth;
+          ctx.beginPath();
+          ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // Micro-gouttelettes de condensation
+        for (let i = 0; i < mistDrops.length; i++) {
+          const m = mistDrops[i];
+          m.x += m.vx + pointer.vx * 0.015;
+          m.y += m.vy - scrollDelta * 0.04;
+          if (m.x < -10) m.x = width + 10;
+          if (m.x > width + 10) m.x = -10;
+          if (m.y < -10) m.y = height + 10;
+          if (m.y > height + 10) m.y = -10;
+
+          ctx.fillStyle = `rgba(186, 230, 253, ${m.alpha})`;
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Gouttes d'eau réalistes
+        for (let i = 0; i < droplets.length; i++) {
+          const d = droplets[i];
+          d.phase += d.phaseSpeed;
+          d.vx += Math.cos(d.phase * 0.65) * 0.006;
+          d.vy += Math.sin(d.phase * 0.8) * 0.006 - scrollDelta * 0.012;
+
+          if (pointer.active) {
+            const dx = d.x - pointer.x;
+            const dy = d.y - pointer.y;
+            const dist = Math.hypot(dx, dy);
+            const influenceRadius = 155;
+            if (dist < influenceRadius && dist > 0.1) {
+              const force = (1 - dist / influenceRadius) * 0.42;
+              d.vx += (dx / dist) * force + pointer.vx * 0.008;
+              d.vy += (dy / dist) * force + pointer.vy * 0.008;
+            }
+          }
+
+          d.vx *= 0.972;
+          d.vy *= 0.972;
+          d.x += d.vx;
+          d.y += d.vy;
+
+          const pad = 32;
+          if (d.x < -pad) d.x = width + pad;
+          if (d.x > width + pad) d.x = -pad;
+          if (d.y < -pad) d.y = height + pad;
+          if (d.y > height + pad) d.y = -pad;
+
+          drawRealisticDroplet(d);
+        }
+
+        pointer.vx *= 0.78;
+        pointer.vy *= 0.78;
+        requestAnimationFrame(animateFrame);
+      }
+
+      resizeCanvas();
+      rebuildParticles();
+      bindAppleCards();
+      animateFrame();
+
+      dropletController = {
+        setMultiplier(val) {
+          densityMultiplier = val;
+          rebuildParticles();
+        }
+      };
+    })();
+
+    /**
+     * Étapes interactives du soin intérieur
+     */
+    const CARE_STEPS = [
+      {
+        tag: "Étape 01 • Aspiration & Injection-Extraction",
+        title: "Sièges tissus, moquettes, tapis et coffre",
+        desc: "Décrassage mécanique, aspiration des zones profondes et glissières, puis injection-extraction ciblée pour décoller taches, poussières incrustées et résidus d'usage quotidien."
+      },
+      {
+        tag: "Étape 02 • Cuir & Plastiques Mats",
+        title: "Selleries cuir, console, aérateurs & plastiques mats",
+        desc: "Nettoyage doux et précis des surfaces intérieures avec finition mate équilibrée, sans effet gras ni film collant au toucher."
+      },
+      {
+        tag: "Étape 03 • Plafonnier, Vitres & Odeurs",
+        title: "Plafonnier délicat, vitres intérieures & assainissement",
+        desc: "Traitement attentif du ciel de toit, nettoyage des vitres intérieures sans traces et neutralisation des odeurs pour un habitacle sain."
+      }
+    ];
+
+    function setActiveCareStep(index) {
+      const step = CARE_STEPS[index];
+      if (!step) return;
+
+      document.getElementById("careStepTag").textContent = step.tag;
+      document.getElementById("careStepTitle").textContent = step.title;
+      document.getElementById("careStepDesc").textContent = step.desc;
+
+      document.querySelectorAll(".care-step-tab").forEach((btn, idx) => {
+        if (idx === index) {
+          btn.className = "care-step-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-display font-bold bg-electric text-abyss transition-all";
+        } else {
+          btn.className = "care-step-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-display font-bold glass-card border border-white/15 text-zinc-200 hover:border-electric/50 transition-all";
+        }
+      });
+    }
+
+    /**
+     * Formulaire & génération du récapitulatif de réservation
+     */
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("footerYear").textContent = new Date().getFullYear();
+
+      const dateInput = document.getElementById("bookingDate");
+      if (dateInput) {
+        dateInput.min = new Date().toISOString().split("T")[0];
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      document.querySelectorAll(".reveal-item").forEach((el) => observer.observe(el));
+    });
+
+    function selectInteriorPackage(pkgLabel) {
+      const selectEl = document.getElementById("selectedPackage");
+      const sectionEl = document.getElementById("reservation");
+      if (selectEl) {
+        selectEl.value = pkgLabel;
+        selectEl.classList.add("border-electric");
+        setTimeout(() => selectEl.classList.remove("border-electric"), 1300);
+      }
+      if (sectionEl) {
+        sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function formatDateFr(isoDate) {
+      if (!isoDate || !isoDate.includes("-")) return isoDate;
+      const [year, month, day] = isoDate.split("-");
+      return `${day}/${month}/${year}`;
+    }
+
+    document.getElementById("interiorBookingForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const clientName = document.getElementById("clientName").value.trim();
+      const clientContact = document.getElementById("clientContact").value.trim();
+      const vehicleModel = document.getElementById("vehicleModel").value.trim();
+      const selectedPackage = document.getElementById("selectedPackage").value;
+      const bookingDate = formatDateFr(document.getElementById("bookingDate").value);
+      const bookingWindow = document.getElementById("bookingWindow").value;
+      const interiorNotes = document.getElementById("interiorNotes").value.trim();
+
+      currentBookingSummary =
+        `DEMANDE 100% INTÉRIEUR — WASH X DETAILING (@wash_x_detailling)\n` +
+        `--------------------------------------------------------\n` +
+        `• Client : ${clientName}\n` +
+        `• Contact : ${clientContact}\n` +
+        `• Véhicule : ${vehicleModel}\n` +
+        `• Formule : ${selectedPackage}\n` +
+        `• Créneau : ${bookingDate} (${bookingWindow})\n` +
+        (interiorNotes ? `• Détails : ${interiorNotes}\n` : "") +
+        `--------------------------------------------------------`;
+
+      document.getElementById("summaryTextOutput").textContent = currentBookingSummary;
+      const summaryBox = document.getElementById("bookingSummaryBox");
+      summaryBox.classList.remove("hidden");
+
+      const encodedMsg = encodeURIComponent(currentBookingSummary);
+      const encodedSubject = encodeURIComponent(`Wash X Detailing — ${selectedPackage} (${clientName})`);
+
+      const waLink = document.getElementById("whatsappActionLink");
+      waLink.href = OWNER_WHATSAPP
+        ? `https://wa.me/${OWNER_WHATSAPP}?text=${encodedMsg}`
+        : `https://api.whatsapp.com/send?text=${encodedMsg}`;
+
+      const mailLink = document.getElementById("emailActionLink");
+      mailLink.href = `mailto:${OWNER_EMAIL}?subject=${encodedSubject}&body=${encodedMsg}`;
+
+      const statusEl = document.getElementById("webhookStatusMessage");
+      if (WEBHOOK_URL && WEBHOOK_URL.trim() !== "") {
+        statusEl.classList.remove("hidden");
+        statusEl.textContent = "Envoi de la demande en cours...";
+        try {
+          const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({
+              clientName,
+              clientContact,
+              vehicleModel,
+              selectedPackage,
+              bookingDate,
+              bookingWindow,
+              interiorNotes,
+              summary: currentBookingSummary
+            })
+          });
+          statusEl.textContent = response.ok
+            ? "✓ Demande transmise avec succès."
+            : "Utilisez les boutons ci-dessous pour envoyer votre demande.";
+        } catch (err) {
+          statusEl.textContent = "Utilisez les boutons ci-dessous pour envoyer votre demande.";
+        }
+      }
+
+      summaryBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    function copySummaryText() {
+      if (!currentBookingSummary) return;
+      const labelEl = document.getElementById("copySummaryLabel");
+      const textarea = document.createElement("textarea");
+      textarea.value = currentBookingSummary;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        document.execCommand("copy");
+        labelEl.textContent = "Copié !";
+        setTimeout(() => { labelEl.textContent = "Copier le message"; }, 2200);
+      } catch (err) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(currentBookingSummary);
+          labelEl.textContent = "Copié !";
+          setTimeout(() => { labelEl.textContent = "Copier le message"; }, 2200);
+        }
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+
+    function hideSummaryBox() {
+      document.getElementById("bookingSummaryBox").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>
