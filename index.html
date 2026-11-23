@@ -13,13 +13,15 @@
       --bg-void: #05070c;
       --bg-elevated: #0b101b;
       --glass-bg: rgba(13, 20, 34, 0.62);
-      --glass-border: rgba(125, 211, 252, 0.16);
+      --glass-border: rgba(192, 132, 252, 0.22);
       --glass-highlight: rgba(255, 255, 255, 0.08);
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --accent-cyan: #38bdf8;
       --accent-blue: #2563eb;
       --accent-ice: #bae6fd;
+      --accent-violet: #a855f7;
+      --accent-violet-bright: #d8b4fe;
       --scroll-progress: 0%;
       --pointer-x: 50vw;
       --pointer-y: 40vh;
@@ -46,11 +48,40 @@
       min-height: 100vh;
       width: 100%;
       background:
-        radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(56, 189, 248, 0.14), transparent 36%),
-        radial-gradient(circle at 82% 14%, rgba(37, 99, 235, 0.16), transparent 44%),
-        radial-gradient(circle at 15% 85%, rgba(14, 165, 233, 0.10), transparent 48%),
-        linear-gradient(180deg, #05070c 0%, #070b14 52%, #04060a 100%);
+        radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(168, 85, 247, 0.24), rgba(56, 189, 248, 0.10) 28%, transparent 44%),
+        radial-gradient(circle at 82% 14%, rgba(139, 92, 246, 0.22), transparent 46%),
+        radial-gradient(circle at 15% 85%, rgba(192, 132, 252, 0.16), transparent 50%),
+        linear-gradient(180deg, #06050e 0%, #080916 52%, #04050b 100%);
       overflow-x: hidden;
+    }
+
+    /* Aura lumineuse violette dynamique */
+    .violet-aura-layer {
+      position: fixed;
+      inset: -18%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 46% 38% at 24% 26%, rgba(168, 85, 247, 0.28), transparent 68%),
+        radial-gradient(ellipse 44% 42% at 78% 34%, rgba(147, 51, 234, 0.24), transparent 70%),
+        radial-gradient(ellipse 52% 36% at 52% 78%, rgba(192, 132, 252, 0.19), transparent 72%);
+      filter: blur(36px);
+      animation: violetAuraPulse 9s ease-in-out infinite alternate;
+    }
+
+    @keyframes violetAuraPulse {
+      0% {
+        transform: translate3d(-2%, -2%, 0) scale(0.98) rotate(-1deg);
+        opacity: 0.78;
+      }
+      50% {
+        transform: translate3d(2.5%, 1.5%, 0) scale(1.07) rotate(1.5deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(-1.5%, 2.5%, 0) scale(1.02) rotate(-0.5deg);
+        opacity: 0.88;
+      }
     }
 
     /* Top scroll progress bar */
@@ -61,18 +92,18 @@
       width: var(--scroll-progress);
       height: 2.5px;
       z-index: 60;
-      background: linear-gradient(90deg, #2563eb, #38bdf8, #e0f2fe);
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.65);
+      background: linear-gradient(90deg, #7e22ce, #a855f7, #38bdf8, #f3e8ff);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.75);
       pointer-events: none;
     }
 
-    /* Interactive water droplet canvas */
+    /* Interactive bubbles & droplets canvas */
     #droplet-canvas {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      z-index: 1;
       pointer-events: none;
     }
 
@@ -85,12 +116,52 @@
     /* Glassmorphism */
     .glass-panel {
       background: var(--glass-bg);
-      backdrop-filter: blur(20px) saturate(150%);
-      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      backdrop-filter: blur(20px) saturate(155%);
+      -webkit-backdrop-filter: blur(20px) saturate(155%);
       border: 1px solid var(--glass-border);
       box-shadow:
         inset 0 1px 0 var(--glass-highlight),
-        0 18px 44px rgba(0, 0, 0, 0.45);
+        0 18px 44px rgba(0, 0, 0, 0.45),
+        0 0 28px rgba(139, 92, 246, 0.08);
+    }
+
+    /* Mousse de savon sur les onglets */
+    .soap-tab-target {
+      position: relative;
+      overflow: visible !important;
+    }
+
+    .soap-foam-overlay {
+      position: absolute;
+      inset: -7px -4px auto -4px;
+      height: 22px;
+      pointer-events: none;
+      z-index: 5;
+      overflow: visible;
+    }
+
+    .soap-foam-puff {
+      position: absolute;
+      border-radius: 999px;
+      background: radial-gradient(
+        circle at 32% 28%,
+        rgba(255, 255, 255, 0.96),
+        rgba(243, 232, 255, 0.84) 56%,
+        rgba(192, 132, 252, 0.45) 100%
+      );
+      box-shadow:
+        0 2px 10px rgba(168, 85, 247, 0.32),
+        inset 0 -2px 4px rgba(126, 34, 206, 0.22);
+      animation: soapFoamFloat 4.2s ease-in-out infinite;
+    }
+
+    @keyframes soapFoamFloat {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-2.5px) scale(1.07);
+      }
     }
 
     /* Logo blending on dark surface */
@@ -153,8 +224,8 @@
       opacity: var(--glare-opacity, 0);
       background: radial-gradient(
         420px circle at var(--gx, 50%) var(--gy, 50%),
-        rgba(186, 230, 253, 0.16),
-        rgba(56, 189, 248, 0.05) 38%,
+        rgba(216, 180, 254, 0.18),
+        rgba(168, 85, 247, 0.08) 38%,
         transparent 72%
       );
       transition: opacity 0.25s ease;
@@ -162,10 +233,10 @@
 
     @media (hover: hover) and (pointer: fine) {
       .tilt-card:hover {
-        border-color: rgba(125, 211, 252, 0.38);
+        border-color: rgba(192, 132, 252, 0.48);
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.16),
-          0 28px 65px rgba(2, 132, 199, 0.16),
+          0 28px 65px rgba(147, 51, 234, 0.22),
           0 18px 40px rgba(0, 0, 0, 0.55);
       }
     }
@@ -190,6 +261,7 @@
       justify-content: center;
       gap: 10px;
       width: 100%;
+      overflow: visible;
     }
 
     .brand-link {
@@ -219,7 +291,7 @@
 
     .brand-sub {
       font-size: 0.73rem;
-      color: var(--accent-cyan);
+      color: var(--accent-violet-bright);
       font-weight: 500;
     }
 
@@ -236,11 +308,14 @@
       text-decoration: none;
       font-size: 0.84rem;
       font-weight: 500;
-      transition: color 0.25s ease;
+      padding: 4px 8px;
+      border-radius: 10px;
+      transition: color 0.25s ease, background 0.25s ease;
     }
 
     .nav-links a:hover {
       color: var(--text-primary);
+      background: rgba(168, 85, 247, 0.12);
     }
 
     .nav-actions {
@@ -264,22 +339,22 @@
       gap: 8px;
       padding: 11px 20px;
       border-radius: 999px;
-      border: 1px solid rgba(186, 230, 253, 0.35);
-      background: linear-gradient(135deg, #0284c7 0%, #2563eb 55%, #38bdf8 100%);
+      border: 1px solid rgba(216, 180, 254, 0.42);
+      background: linear-gradient(135deg, #7e22ce 0%, #2563eb 55%, #a855f7 100%);
       color: #ffffff;
       font-size: 0.88rem;
       font-weight: 600;
       text-decoration: none;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 8px 26px rgba(147, 51, 234, 0.38);
       transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, filter 0.25s ease;
       text-align: center;
     }
 
     .btn-primary:hover {
       transform: translateY(-1.5px);
-      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.42);
-      filter: brightness(1.06);
+      box-shadow: 0 12px 32px rgba(168, 85, 247, 0.5);
+      filter: brightness(1.08);
     }
 
     .btn-secondary {
@@ -289,7 +364,7 @@
       gap: 8px;
       padding: 11px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.26);
+      border: 1px solid rgba(192, 132, 252, 0.28);
       background: rgba(15, 23, 42, 0.68);
       color: var(--text-primary);
       font-size: 0.88rem;
@@ -301,8 +376,8 @@
     }
 
     .btn-secondary:hover {
-      border-color: rgba(56, 189, 248, 0.45);
-      background: rgba(30, 41, 59, 0.82);
+      border-color: rgba(192, 132, 252, 0.55);
+      background: rgba(30, 27, 58, 0.85);
     }
 
     /* Containers & sections */
@@ -338,9 +413,10 @@
       font-size: 0.76rem;
       font-weight: 600;
       line-height: 1.35;
-      color: var(--accent-ice);
-      background: rgba(14, 165, 233, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.28);
+      color: var(--accent-violet-bright);
+      background: rgba(147, 51, 234, 0.16);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.2);
       margin-bottom: 18px;
       max-width: 100%;
     }
@@ -356,7 +432,7 @@
     }
 
     .hero-gradient {
-      background: linear-gradient(135deg, #ffffff 10%, #bae6fd 52%, #38bdf8 95%);
+      background: linear-gradient(135deg, #ffffff 10%, #e9d5ff 48%, #a855f7 82%, #38bdf8 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -426,7 +502,7 @@
       border-radius: 18px;
       overflow: hidden;
       position: relative;
-      border: 1px solid rgba(125, 211, 252, 0.22);
+      border: 1px solid rgba(192, 132, 252, 0.28);
     }
 
     .hero-logo-stage:hover .logo-img {
@@ -453,7 +529,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--accent-cyan);
+      color: var(--accent-violet-bright);
       margin-bottom: 8px;
     }
 
@@ -491,9 +567,9 @@
       width: 32px;
       height: 32px;
       border-radius: 10px;
-      background: rgba(56, 189, 248, 0.14);
-      border: 1px solid rgba(56, 189, 248, 0.32);
-      color: var(--accent-ice);
+      background: rgba(168, 85, 247, 0.18);
+      border: 1px solid rgba(192, 132, 252, 0.38);
+      color: var(--accent-violet-bright);
       font-weight: 700;
       font-size: 0.82rem;
       margin-bottom: 12px;
@@ -516,8 +592,9 @@
     .step-tabs {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 18px;
+      overflow: visible;
     }
 
     .step-tab {
@@ -525,8 +602,8 @@
       text-align: left;
       padding: 10px 14px;
       border-radius: 14px;
-      background: rgba(15, 23, 42, 0.65);
-      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(15, 23, 42, 0.68);
+      border: 1px solid rgba(192, 132, 252, 0.26);
       color: var(--text-secondary);
       font-size: 0.84rem;
       font-weight: 600;
@@ -537,8 +614,9 @@
     .step-tab.active,
     .step-tab:hover {
       color: #ffffff;
-      border-color: rgba(56, 189, 248, 0.55);
-      background: rgba(14, 165, 233, 0.18);
+      border-color: rgba(192, 132, 252, 0.65);
+      background: rgba(147, 51, 234, 0.22);
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.22);
     }
 
     /* Packages */
@@ -558,8 +636,11 @@
     }
 
     .package-card.featured {
-      border-color: rgba(56, 189, 248, 0.45);
-      background: linear-gradient(160deg, rgba(14, 30, 56, 0.76), rgba(10, 17, 30, 0.68));
+      border-color: rgba(192, 132, 252, 0.55);
+      background: linear-gradient(160deg, rgba(46, 16, 101, 0.48), rgba(14, 30, 56, 0.72));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        0 20px 52px rgba(126, 34, 206, 0.24);
     }
 
     .package-card button {
@@ -583,7 +664,7 @@
 
     .price-meta {
       font-size: 0.84rem;
-      color: var(--accent-cyan);
+      color: var(--accent-violet-bright);
       font-weight: 500;
     }
 
@@ -610,8 +691,8 @@
       border-radius: 50%;
       margin-top: 6px;
       flex-shrink: 0;
-      background: var(--accent-cyan);
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+      background: var(--accent-violet-bright);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.85);
     }
 
     /* Booking form */
@@ -665,8 +746,8 @@
     .field input:focus,
     .field select:focus,
     .field textarea:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+      border-color: var(--accent-violet-bright);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
     }
 
     .form-actions {
@@ -685,7 +766,7 @@
       padding: 15px;
       border-radius: 16px;
       background: rgba(5, 9, 17, 0.84);
-      border: 1px solid rgba(125, 211, 252, 0.18);
+      border: 1px solid rgba(192, 132, 252, 0.24);
       font-size: 0.88rem;
       line-height: 1.6;
       color: #e2e8f0;
@@ -694,9 +775,9 @@
     }
 
     .summary-box.confirmed {
-      border-color: rgba(56, 189, 248, 0.55);
-      background: rgba(14, 30, 56, 0.72);
-      color: #f0f9ff;
+      border-color: rgba(192, 132, 252, 0.6);
+      background: rgba(46, 16, 101, 0.45);
+      color: #f5f3ff;
     }
 
     /* Footer */
@@ -818,10 +899,15 @@
       .tilt-card {
         transform: none !important;
       }
+      .violet-aura-layer,
+      .soap-foam-puff {
+        animation: none !important;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="violet-aura-layer" aria-hidden="true"></div>
   <div class="scroll-progress" aria-hidden="true"></div>
   <canvas id="droplet-canvas" aria-hidden="true"></canvas>
 
@@ -972,7 +1058,7 @@
           <div class="packages-grid">
             <article class="glass-panel package-card tilt-card apple-reveal">
               <div>
-                <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.08em;">
+                <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-violet-bright); text-transform: uppercase; letter-spacing: 0.08em;">
                   Entretien régulier
                 </div>
                 <h3 class="card-title" style="margin-top: 6px; font-size: 1.35rem;">Essentiel Intérieur</h3>
@@ -994,7 +1080,7 @@
 
             <article class="glass-panel package-card featured tilt-card apple-reveal">
               <div>
-                <div style="font-size: 0.78rem; font-weight: 700; color: #bae6fd; text-transform: uppercase; letter-spacing: 0.08em;">
+                <div style="font-size: 0.78rem; font-weight: 700; color: #f3e8ff; text-transform: uppercase; letter-spacing: 0.08em;">
                   Le plus demandé
                 </div>
                 <h3 class="card-title" style="margin-top: 6px; font-size: 1.35rem;">Confort Intérieur</h3>
@@ -1017,7 +1103,7 @@
 
             <article class="glass-panel package-card tilt-card apple-reveal">
               <div>
-                <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.08em;">
+                <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-violet-bright); text-transform: uppercase; letter-spacing: 0.08em;">
                   Remise à niveau poussée
                 </div>
                 <h3 class="card-title" style="margin-top: 6px; font-size: 1.35rem;">Intégrale Habitacle</h3>
@@ -1131,7 +1217,7 @@
           <div>
             <div style="font-weight: 700; font-size: 0.94rem; color: #fff;">Wash X Detailing</div>
             <div style="font-size: 0.8rem; color: var(--text-secondary);">
-              100 % nettoyage intérieur · Pas de déplacement à domicile · <a href="https://www.instagram.com/wash_x_detailling/" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: none;">@wash_x_detailling</a>
+              100 % nettoyage intérieur · Pas de déplacement à domicile · <a href="https://www.instagram.com/wash_x_detailling/" target="_blank" rel="noopener noreferrer" style="color: var(--accent-violet-bright); text-decoration: none;">@wash_x_detailling</a>
             </div>
           </div>
         </div>
@@ -1149,6 +1235,40 @@
       const root = document.documentElement;
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+      // Mousse de savon aléatoire recouvrant partiellement les onglets
+      function applySoapFoamToTabs() {
+        const tabElements = document.querySelectorAll('.step-tab, .nav-links a');
+        tabElements.forEach((el) => {
+          el.classList.add('soap-tab-target');
+          const existing = el.querySelector('.soap-foam-overlay');
+          if (existing) existing.remove();
+
+          const overlay = document.createElement('span');
+          overlay.className = 'soap-foam-overlay';
+          overlay.setAttribute('aria-hidden', 'true');
+
+          const puffCount = 4 + Math.floor(Math.random() * 5);
+          for (let i = 0; i < puffCount; i++) {
+            const puff = document.createElement('span');
+            puff.className = 'soap-foam-puff';
+            const size = Math.round(8 + Math.random() * 13);
+            const leftPct = Math.round(Math.random() * 88);
+            const topPx = Math.round(-5 + Math.random() * 10);
+
+            puff.style.width = `${size}px`;
+            puff.style.height = `${size}px`;
+            puff.style.left = `${leftPct}%`;
+            puff.style.top = `${topPx}px`;
+            puff.style.opacity = (0.52 + Math.random() * 0.44).toFixed(2);
+            puff.style.animationDelay = `${(-Math.random() * 4).toFixed(2)}s`;
+            overlay.appendChild(puff);
+          }
+
+          el.appendChild(overlay);
+        });
+      }
+      applySoapFoamToTabs();
 
       // Inertial pointer & scroll choreography
       let targetPointerX = window.innerWidth * 0.5;
@@ -1242,7 +1362,7 @@
           stepTabs.forEach((t, i) => t.classList.toggle('active', i === idx));
           stepCards.forEach((c, i) => {
             if (!c) return;
-            c.style.borderColor = i === idx ? 'rgba(56, 189, 248, 0.55)' : '';
+            c.style.borderColor = i === idx ? 'rgba(192, 132, 252, 0.65)' : '';
           });
         });
       });
@@ -1387,7 +1507,7 @@
         }
       });
 
-      // Realistic interactive water droplets canvas
+      // Dynamic soap bubbles & interactive water droplets canvas
       const canvas = document.getElementById('droplet-canvas');
       const ctx = canvas ? canvas.getContext('2d') : null;
 
@@ -1409,30 +1529,32 @@
       }
 
       function createDroplet(initial = true) {
-        const mobileScale = width < 768 ? 0.85 : 1;
-        const r = (5 + Math.random() * 18) * mobileScale;
+        const mobileScale = width < 768 ? 0.92 : 1.05;
+        const isSoapBubble = Math.random() < 0.55;
+        const r = (isSoapBubble ? 8 + Math.random() * 24 : 5 + Math.random() * 16) * mobileScale;
         return {
           x: Math.random() * width,
-          y: initial ? Math.random() * height : height + r + Math.random() * 40,
-          vx: (Math.random() - 0.5) * 0.45,
-          vy: -(0.22 + Math.random() * 0.65),
+          y: initial ? Math.random() * height : height + r + Math.random() * 45,
+          vx: (Math.random() - 0.5) * 0.75,
+          vy: -(0.38 + Math.random() * 0.95),
           r,
+          isSoapBubble,
           phase: Math.random() * Math.PI * 2,
-          wobbleFreq: 0.015 + Math.random() * 0.025,
-          wobbleAmp: 0.06 + Math.random() * 0.09,
-          opacity: 0.28 + Math.random() * 0.42
+          wobbleFreq: 0.02 + Math.random() * 0.03,
+          wobbleAmp: isSoapBubble ? 0.08 + Math.random() * 0.1 : 0.05 + Math.random() * 0.08,
+          opacity: 0.34 + Math.random() * 0.44
         };
       }
 
       function initDroplets() {
-        const maxCount = width < 768 ? 24 : 50;
-        const total = Math.min(maxCount, Math.max(16, Math.floor((width * height) / 36000)));
+        const maxCount = width < 768 ? 38 : 76;
+        const total = Math.min(maxCount, Math.max(24, Math.floor((width * height) / 24000)));
         droplets = Array.from({ length: total }, () => createDroplet(true));
       }
 
       function drawRealisticDroplet(d) {
         if (!ctx) return;
-        const steps = 26;
+        const steps = 28;
         ctx.save();
         ctx.translate(d.x, d.y);
 
@@ -1442,10 +1564,10 @@
           const tension =
             1 +
             Math.sin(angle * 2 + d.phase) * d.wobbleAmp +
-            Math.cos(angle * 3 - d.phase * 0.7) * (d.wobbleAmp * 0.5);
+            Math.cos(angle * 3 - d.phase * 0.7) * (d.wobbleAmp * 0.55);
           const rad = d.r * tension;
           const px = Math.cos(angle) * rad;
-          const py = Math.sin(angle) * rad * 1.06;
+          const py = Math.sin(angle) * rad * 1.05;
           if (i === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         }
@@ -1454,21 +1576,31 @@
         const bodyGrad = ctx.createRadialGradient(
           -d.r * 0.28,
           -d.r * 0.32,
-          d.r * 0.08,
+          d.r * 0.06,
           0,
           0,
-          d.r * 1.12
+          d.r * 1.14
         );
-        bodyGrad.addColorStop(0, `rgba(224, 242, 254, ${d.opacity * 0.28})`);
-        bodyGrad.addColorStop(0.45, `rgba(56, 189, 248, ${d.opacity * 0.14})`);
-        bodyGrad.addColorStop(0.82, `rgba(37, 99, 235, ${d.opacity * 0.34})`);
-        bodyGrad.addColorStop(1, `rgba(186, 230, 253, ${d.opacity * 0.65})`);
+
+        if (d.isSoapBubble) {
+          bodyGrad.addColorStop(0, `rgba(255, 255, 255, ${d.opacity * 0.36})`);
+          bodyGrad.addColorStop(0.45, `rgba(216, 180, 254, ${d.opacity * 0.20})`);
+          bodyGrad.addColorStop(0.82, `rgba(168, 85, 247, ${d.opacity * 0.38})`);
+          bodyGrad.addColorStop(1, `rgba(243, 232, 255, ${d.opacity * 0.75})`);
+        } else {
+          bodyGrad.addColorStop(0, `rgba(224, 242, 254, ${d.opacity * 0.30})`);
+          bodyGrad.addColorStop(0.45, `rgba(147, 51, 234, ${d.opacity * 0.16})`);
+          bodyGrad.addColorStop(0.82, `rgba(56, 189, 248, ${d.opacity * 0.34})`);
+          bodyGrad.addColorStop(1, `rgba(216, 180, 254, ${d.opacity * 0.65})`);
+        }
 
         ctx.fillStyle = bodyGrad;
         ctx.fill();
 
-        ctx.lineWidth = Math.max(0.8, d.r * 0.045);
-        ctx.strokeStyle = `rgba(186, 230, 253, ${d.opacity * 0.55})`;
+        ctx.lineWidth = Math.max(0.85, d.r * 0.048);
+        ctx.strokeStyle = d.isSoapBubble
+          ? `rgba(233, 213, 255, ${d.opacity * 0.68})`
+          : `rgba(192, 132, 252, ${d.opacity * 0.55})`;
         ctx.stroke();
 
         ctx.beginPath();
@@ -1481,25 +1613,25 @@
           0,
           Math.PI * 2
         );
-        ctx.fillStyle = `rgba(125, 211, 252, ${d.opacity * 0.34})`;
+        ctx.fillStyle = `rgba(216, 180, 254, ${d.opacity * 0.36})`;
         ctx.fill();
 
         ctx.beginPath();
         ctx.ellipse(
           -d.r * 0.34,
           -d.r * 0.34,
-          d.r * 0.24,
-          d.r * 0.13,
+          d.r * 0.25,
+          d.r * 0.14,
           -0.65,
           0,
           Math.PI * 2
         );
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.92, d.opacity * 1.15)})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.95, d.opacity * 1.18)})`;
         ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(-d.r * 0.12, -d.r * 0.5, Math.max(1.1, d.r * 0.07), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.85, d.opacity * 0.95)})`;
+        ctx.arc(-d.r * 0.12, -d.r * 0.5, Math.max(1.1, d.r * 0.075), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.88, d.opacity * 0.96)})`;
         ctx.fill();
 
         ctx.restore();
@@ -1511,7 +1643,7 @@
 
         for (let i = ripples.length - 1; i >= 0; i--) {
           const rp = ripples[i];
-          rp.r += 2.6;
+          rp.r += 2.8;
           rp.alpha *= 0.955;
           if (rp.alpha < 0.015) {
             ripples.splice(i, 1);
@@ -1519,8 +1651,8 @@
           }
           ctx.beginPath();
           ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(125, 211, 252, ${rp.alpha.toFixed(3)})`;
-          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = `rgba(192, 132, 252, ${rp.alpha.toFixed(3)})`;
+          ctx.lineWidth = 1.5;
           ctx.stroke();
         }
 
@@ -1532,18 +1664,18 @@
             const dx = d.x - pointer.x;
             const dy = d.y - pointer.y;
             const dist = Math.hypot(dx, dy);
-            const influenceRadius = 135;
+            const influenceRadius = 150;
             if (dist > 0.1 && dist < influenceRadius) {
-              const force = (1 - dist / influenceRadius) * 0.65;
-              d.vx += (dx / dist) * force + pointer.vx * 0.012;
-              d.vy += (dy / dist) * force + pointer.vy * 0.012;
+              const force = (1 - dist / influenceRadius) * 0.85;
+              d.vx += (dx / dist) * force + pointer.vx * 0.016;
+              d.vy += (dy / dist) * force + pointer.vy * 0.016;
             }
           }
 
-          d.vx *= 0.96;
-          d.vy = d.vy * 0.97 + (-0.28) * 0.03;
+          d.vx *= 0.965;
+          d.vy = d.vy * 0.97 + (-0.42) * 0.03;
 
-          d.x += d.vx + Math.sin(d.phase) * 0.25;
+          d.x += d.vx + Math.sin(d.phase) * 0.38;
           d.y += d.vy;
 
           if (d.x < -40) d.x = width + 30;
@@ -1571,7 +1703,7 @@
       }, { passive: true });
 
       window.addEventListener('pointerdown', (e) => {
-        ripples.push({ x: e.clientX, y: e.clientY, r: 6, alpha: 0.55 });
+        ripples.push({ x: e.clientX, y: e.clientY, r: 6, alpha: 0.62 });
       }, { passive: true });
 
       window.addEventListener('resize', resizeCanvas);
