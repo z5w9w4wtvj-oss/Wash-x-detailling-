@@ -1141,10 +1141,9 @@
 
   <script>
     (function () {
-      // Configuration Supabase (clé publique/publishable uniquement)
       const SUPABASE_CONFIG = {
-        url: "TON_PROJECT_URL", // Ex. https://xxxxxxxxxxxx.supabase.co
-        publishableKey: "TA_CLE_PUBLISHABLE_SUPABASE" // Ex. sb_publis...
+        url: "https://hsggvdecppjupxhbcjyo.supabase.co",
+        publishableKey: "sb_publishable_8oaSroP_p18wQstcGLYH_g_4Xt1ilZT"
       };
 
       const root = document.documentElement;
@@ -1290,12 +1289,8 @@
       }
 
       async function sendToSupabase(payload) {
-        const baseUrl = (SUPABASE_CONFIG.url || '').trim().replace(/\/+$/, '');
+        const baseUrl = (SUPABASE_CONFIG.url || '').trim().replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
         const apiKey = (SUPABASE_CONFIG.publishableKey || '').trim();
-
-        if (!baseUrl || !apiKey || baseUrl.includes('TON_PROJECT_URL') || apiKey.includes('TA_CLE_PUBLISHABLE')) {
-          throw new Error('Configuration Supabase non renseignée');
-        }
 
         const combinedNotes = [
           payload.preferredSlot ? `Créneaux souhaités : ${payload.preferredSlot}` : null,
@@ -1362,10 +1357,11 @@
             summaryOut.textContent = `✅ Votre demande a bien été enregistrée dans le CRM Wash X.\n\n${text}`;
           }
           form.reset();
-        } catch (_) {
+        } catch (err) {
+          console.error('Erreur Supabase :', err);
           if (summaryOut) {
             summaryOut.classList.remove('confirmed');
-            summaryOut.textContent = `⚠️ L'envoi direct vers la base n'a pas abouti (vérifie tes clés Supabase ou la politique INSERT). Tu peux copier le récapitulatif ci-dessous :\n\n${text}`;
+            summaryOut.textContent = `⚠️ L'envoi direct vers la base n'a pas abouti (vérifie la politique INSERT RLS dans Supabase). Tu peux copier le récapitulatif ci-dessous :\n\n${text}`;
           }
         } finally {
           if (submitBtn) {
