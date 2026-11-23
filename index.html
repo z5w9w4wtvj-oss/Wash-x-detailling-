@@ -780,6 +780,78 @@
       color: #f5f3ff;
     }
 
+    /* Pop-up confirmation RDV */
+    .booking-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(3, 5, 11, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .booking-modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .booking-modal-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 24px 20px;
+      border-radius: 24px;
+      background: linear-gradient(160deg, rgba(24, 15, 44, 0.94), rgba(10, 17, 30, 0.96));
+      border: 1px solid rgba(192, 132, 252, 0.48);
+      box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.65),
+        0 0 36px rgba(168, 85, 247, 0.25);
+      text-align: left;
+    }
+
+    .booking-modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #f3e8ff;
+      background: rgba(168, 85, 247, 0.22);
+      border: 1px solid rgba(216, 180, 254, 0.35);
+      margin-bottom: 12px;
+    }
+
+    .booking-modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.32rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .booking-modal-copy {
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      white-space: pre-line;
+    }
+
+    .booking-modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .booking-modal-actions .btn-primary,
+    .booking-modal-actions .btn-secondary {
+      flex: 1 1 140px;
+    }
+
     /* Footer */
     footer {
       padding: 36px 0 48px;
@@ -910,6 +982,18 @@
   <div class="violet-aura-layer" aria-hidden="true"></div>
   <div class="scroll-progress" aria-hidden="true"></div>
   <canvas id="droplet-canvas" aria-hidden="true"></canvas>
+
+  <!-- Pop-up après envoi de la demande -->
+  <div id="booking-modal" class="booking-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+    <div class="booking-modal-card">
+      <div class="booking-modal-badge" id="booking-modal-badge">● Demande transmise</div>
+      <h2 id="booking-modal-title" class="booking-modal-title">Demande de rendez-vous envoyée</h2>
+      <p id="booking-modal-copy" class="booking-modal-copy"></p>
+      <div class="booking-modal-actions">
+        <button type="button" id="close-booking-modal-btn" class="btn-primary">Fermer</button>
+      </div>
+    </div>
+  </div>
 
   <div class="content-layer">
     <!-- Header -->
@@ -1378,6 +1462,30 @@
         });
       });
 
+      // Pop-up helpers
+      const bookingModal = document.getElementById('booking-modal');
+      const bookingModalBadge = document.getElementById('booking-modal-badge');
+      const bookingModalTitle = document.getElementById('booking-modal-title');
+      const bookingModalCopy = document.getElementById('booking-modal-copy');
+      const closeBookingModalBtn = document.getElementById('close-booking-modal-btn');
+
+      function openBookingModal({ badge, title, message }) {
+        if (!bookingModal) return;
+        if (bookingModalBadge) bookingModalBadge.textContent = badge || '● Demande transmise';
+        if (bookingModalTitle) bookingModalTitle.textContent = title || 'Demande envoyée';
+        if (bookingModalCopy) bookingModalCopy.textContent = message || '';
+        bookingModal.classList.add('is-open');
+      }
+
+      function closeBookingModal() {
+        bookingModal?.classList.remove('is-open');
+      }
+
+      closeBookingModalBtn?.addEventListener('click', closeBookingModal);
+      bookingModal?.addEventListener('click', (e) => {
+        if (e.target === bookingModal) closeBookingModal();
+      });
+
       // Booking form submission -> Supabase wash_x_prestations
       const form = document.getElementById('booking-form');
       const submitBtn = document.getElementById('submit-booking-btn');
@@ -1476,6 +1584,11 @@
             summaryOut.classList.add('confirmed');
             summaryOut.textContent = `✅ Votre demande a bien été enregistrée dans le CRM Wash X.\n\n${text}`;
           }
+          openBookingModal({
+            badge: '● Confirmation',
+            title: 'Demande de RDV envoyée',
+            message: `Merci ${payload.clientName || 'client'} ! Ta demande pour ${payload.vehicleModel || 'ton véhicule'} (${payload.formula}) a bien été enregistrée.`
+          });
           form.reset();
         } catch (err) {
           console.error('Erreur Supabase :', err);
@@ -1483,6 +1596,11 @@
             summaryOut.classList.remove('confirmed');
             summaryOut.textContent = `⚠️ L'envoi direct vers la base n'a pas abouti (vérifie la politique INSERT RLS dans Supabase). Tu peux copier le récapitulatif ci-dessous :\n\n${text}`;
           }
+          openBookingModal({
+            badge: '● Attention',
+            title: 'Envoi direct indisponible',
+            message: `La demande n'a pas pu être enregistrée directement. Tu peux copier le récapitulatif dans la zone de statut pour l'envoyer manuellement.`
+          });
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
