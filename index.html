@@ -55,7 +55,6 @@
       overflow-x: hidden;
     }
 
-    /* Aura lumineuse violette dynamique */
     .violet-aura-layer {
       position: fixed;
       inset: -18%;
@@ -84,7 +83,6 @@
       }
     }
 
-    /* Top scroll progress bar */
     .scroll-progress {
       position: fixed;
       top: 0;
@@ -97,7 +95,6 @@
       pointer-events: none;
     }
 
-    /* Interactive bubbles & droplets canvas */
     #droplet-canvas {
       position: fixed;
       inset: 0;
@@ -113,7 +110,6 @@
       width: 100%;
     }
 
-    /* Glassmorphism */
     .glass-panel {
       background: var(--glass-bg);
       backdrop-filter: blur(20px) saturate(155%);
@@ -125,7 +121,6 @@
         0 0 28px rgba(139, 92, 246, 0.08);
     }
 
-    /* Mousse de savon sur les onglets */
     .soap-tab-target {
       position: relative;
       overflow: visible !important;
@@ -164,7 +159,6 @@
       }
     }
 
-    /* Logo blending on dark surface */
     .logo-frame {
       position: relative;
       overflow: hidden;
@@ -191,7 +185,6 @@
         linear-gradient(180deg, rgba(4, 7, 13, 0.28) 0%, transparent 24%, transparent 76%, rgba(4, 7, 13, 0.45) 100%);
     }
 
-    /* Apple-style scroll reveal */
     .apple-reveal {
       opacity: 0;
       transform: translateY(22px) scale(0.99);
@@ -206,7 +199,6 @@
       transform: translateY(0) scale(1);
     }
 
-    /* 3D tilt card with specular light */
     .tilt-card {
       position: relative;
       transform-style: preserve-3d;
@@ -241,7 +233,6 @@
       }
     }
 
-    /* Header — mobile-first centered layout without overflow */
     .site-header {
       position: sticky;
       top: 0;
@@ -380,7 +371,6 @@
       background: rgba(30, 27, 58, 0.85);
     }
 
-    /* Containers & sections */
     .container {
       max-width: 1160px;
       margin: 0 auto;
@@ -485,7 +475,6 @@
       margin-top: 3px;
     }
 
-    /* Hero showcase card with logo */
     .hero-visual-wrap {
       transform: translateY(var(--hero-parallax, 0px));
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -548,7 +537,6 @@
       line-height: 1.6;
     }
 
-    /* Bento / Process */
     .bento-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -619,7 +607,6 @@
       box-shadow: 0 0 22px rgba(168, 85, 247, 0.22);
     }
 
-    /* Packages */
     .packages-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -695,7 +682,6 @@
       box-shadow: 0 0 10px rgba(168, 85, 247, 0.85);
     }
 
-    /* Booking form */
     .booking-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -750,20 +736,6 @@
       box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
     }
 
-    .slot-preview-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--accent-violet-bright);
-      background: rgba(147, 51, 234, 0.14);
-      border: 1px solid rgba(192, 132, 252, 0.28);
-      margin-bottom: 14px;
-    }
-
     .form-actions {
       display: flex;
       flex-direction: column;
@@ -794,7 +766,6 @@
       color: #f5f3ff;
     }
 
-    /* Pop-up confirmation RDV */
     .booking-modal-backdrop {
       position: fixed;
       inset: 0;
@@ -866,7 +837,6 @@
       flex: 1 1 140px;
     }
 
-    /* Footer */
     footer {
       padding: 36px 0 48px;
       border-top: 1px solid rgba(148, 163, 184, 0.14);
@@ -997,7 +967,6 @@
   <div class="scroll-progress" aria-hidden="true"></div>
   <canvas id="droplet-canvas" aria-hidden="true"></canvas>
 
-  <!-- Pop-up après envoi de la demande -->
   <div id="booking-modal" class="booking-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
     <div class="booking-modal-card">
       <div class="booking-modal-badge" id="booking-modal-badge">● Ajouté à l'agenda CRM</div>
@@ -1010,7 +979,6 @@
   </div>
 
   <div class="content-layer">
-    <!-- Header -->
     <header class="site-header">
       <nav class="nav-shell glass-panel" aria-label="Navigation principale">
         <a href="#top" class="brand-link">
@@ -1036,7 +1004,6 @@
       </nav>
     </header>
 
-    <!-- Hero -->
     <main id="top">
       <section class="hero">
         <div class="container hero-grid">
@@ -1095,7 +1062,6 @@
         </div>
       </section>
 
-      <!-- Protocol -->
       <section id="protocole">
         <div class="container">
           <div class="section-head apple-reveal">
@@ -1142,7 +1108,6 @@
         </div>
       </section>
 
-      <!-- Formulas -->
       <section id="formules">
         <div class="container">
           <div class="section-head apple-reveal">
@@ -1224,14 +1189,13 @@
         </div>
       </section>
 
-      <!-- Booking -->
       <section id="reservation">
         <div class="container">
           <div class="section-head apple-reveal">
             <div class="section-kicker">Prise de Rendez-vous</div>
             <h2 class="section-title">Préparez votre demande d'entretien intérieur.</h2>
             <p class="section-desc">
-              Choisissez votre date et votre heure : le créneau s'inscrit automatiquement dans l'agenda du CRM dès l'envoi.
+              Renseignez votre véhicule et votre formule pour envoyer votre réservation en quelques secondes.
             </p>
           </div>
 
@@ -1263,20 +1227,9 @@
                 </div>
               </div>
 
-              <div class="form-row-2">
-                <div class="field">
-                  <label for="rdv-date">Date souhaitée (Jour)</label>
-                  <input id="rdv-date" name="rdvDate" type="date" required />
-                </div>
-                <div class="field">
-                  <label for="rdv-time">Heure souhaitée</label>
-                  <input id="rdv-time" name="rdvTime" type="time" required />
-                </div>
-              </div>
-
-              <div id="slot-day-preview" class="slot-preview-pill">
-                <span>📅</span>
-                <span id="slot-day-text">Créneau agenda : sélectionnez une date et une heure</span>
+              <div class="field">
+                <label for="preferred-slot">Disponibilités souhaitées</label>
+                <input id="preferred-slot" name="preferredSlot" type="text" placeholder="Ex. Mercredi 25 à 14h30 ou samedi 10h" />
               </div>
 
               <div class="field">
@@ -1285,7 +1238,7 @@
               </div>
 
               <div class="form-actions">
-                <button type="submit" id="submit-booking-btn" class="btn-primary">Envoyer et ajouter à l'agenda</button>
+                <button type="submit" id="submit-booking-btn" class="btn-primary">Envoyer la demande</button>
                 <button type="button" id="copy-summary-btn" class="btn-secondary">Copier le message</button>
               </div>
             </form>
@@ -1293,7 +1246,7 @@
             <aside class="glass-panel summary-card tilt-card apple-reveal">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
                 <div>
-                  <div style="font-weight: 700; font-size: 1.05rem; color: #fff;">Statut &amp; Agenda CRM</div>
+                  <div style="font-weight: 700; font-size: 1.05rem; color: #fff;">Statut de réservation</div>
                   <div style="font-size: 0.8rem; color: var(--text-secondary);">@wash_x_detailling · 100 % intérieur</div>
                 </div>
                 <div class="logo-frame" style="width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;">
@@ -1302,7 +1255,7 @@
                 </div>
               </div>
 
-              <div id="summary-output" class="summary-box">Sélectionnez une date et une heure puis validez : le rendez-vous apparaîtra dans l'agenda du CRM.</div>
+              <div id="summary-output" class="summary-box">Remplissez le formulaire ci-contre puis validez pour transmettre votre demande de réservation.</div>
 
               <div style="margin-top: 14px;">
                 <a href="https://www.instagram.com/wash_x_detailling/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="width: 100%;">
@@ -1315,7 +1268,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer>
       <div class="container footer-inner">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -1345,7 +1297,6 @@
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-      // Mousse de savon aléatoire recouvrant partiellement les onglets
       function applySoapFoamToTabs() {
         const tabElements = document.querySelectorAll('.step-tab, .nav-links a');
         tabElements.forEach((el) => {
@@ -1379,7 +1330,6 @@
       }
       applySoapFoamToTabs();
 
-      // Inertial pointer & scroll choreography
       let targetPointerX = window.innerWidth * 0.5;
       let targetPointerY = window.innerHeight * 0.35;
       let currentPointerX = targetPointerX;
@@ -1413,7 +1363,6 @@
       }
       requestAnimationFrame(updateMotionFrame);
 
-      // Intersection reveal
       const revealEls = document.querySelectorAll('.apple-reveal');
       if ('IntersectionObserver' in window && !prefersReducedMotion) {
         const observer = new IntersectionObserver(
@@ -1432,7 +1381,6 @@
         revealEls.forEach((el) => el.classList.add('is-visible'));
       }
 
-      // 3D tilt + specular glare on desktop pointers
       if (!prefersReducedMotion && !isTouchDevice) {
         document.querySelectorAll('.tilt-card').forEach((card) => {
           card.addEventListener('pointermove', (e) => {
@@ -1458,7 +1406,6 @@
         });
       }
 
-      // Step highlight tabs
       const stepTabs = document.querySelectorAll('.step-tab');
       const stepCards = [
         document.getElementById('step-card-0'),
@@ -1476,7 +1423,6 @@
         });
       });
 
-      // Formula buttons -> form
       const formulaSelect = document.getElementById('formula-select');
       document.querySelectorAll('.select-formula-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -1487,36 +1433,93 @@
         });
       });
 
-      // Date + Heure -> Jour de la semaine & format CRM
-      const rdvDateInput = document.getElementById('rdv-date');
-      const rdvTimeInput = document.getElementById('rdv-time');
-      const slotDayText = document.getElementById('slot-day-text');
+      const preferredSlotInput = document.getElementById('preferred-slot');
+      const JOURS_SEMAINE = [
+        'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'
+      ];
 
-      function formatSlotLabel(dateStr, timeStr) {
-        if (!dateStr) {
-          return timeStr
-            ? `Créneau agenda : heure ${timeStr} (choisissez une date)`
-            : 'Créneau agenda : sélectionnez une date et une heure';
+      function parseSlotFromText(rawText) {
+        const text = String(rawText || '').trim();
+        const lower = text.toLowerCase();
+
+        let heureRdv = null;
+        const timeMatch = lower.match(/\b([01]?\d|2[0-3])\s*(?:h|:)\s*([0-5]\d)?\b/);
+        if (timeMatch) {
+          const hh = String(Number(timeMatch[1])).padStart(2, '0');
+          const mm = String(timeMatch[2] ? Number(timeMatch[2]) : 0).padStart(2, '0');
+          heureRdv = `${hh}:${mm}`;
         }
-        const parts = dateStr.split('-').map(Number);
-        const dt = new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
-        const dayName = dt.toLocaleDateString('fr-FR', { weekday: 'long' });
-        const formattedDate = dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const capitalDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-        const timePart = timeStr ? ` à ${timeStr}` : '';
-        return `${capitalDay} ${formattedDate}${timePart}`;
+
+        let dateObj = null;
+        const isoMatch = text.match(/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/);
+        const frMatch = text.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+
+        const now = new Date();
+        const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        if (isoMatch) {
+          dateObj = new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+        } else if (frMatch) {
+          const day = Number(frMatch[1]);
+          const month = Number(frMatch[2]) - 1;
+          let year = frMatch[3] ? Number(frMatch[3]) : now.getFullYear();
+          if (year < 100) year += 2000;
+          dateObj = new Date(year, month, day);
+          if (!frMatch[3] && dateObj < todayMidnight) {
+            dateObj.setFullYear(year + 1);
+          }
+        } else if (/\baujourd'hui\b/.test(lower)) {
+          dateObj = new Date(todayMidnight);
+        } else if (/\bdemain\b/.test(lower)) {
+          dateObj = new Date(todayMidnight);
+          dateObj.setDate(dateObj.getDate() + 1);
+        } else {
+          const foundDayIndex = JOURS_SEMAINE.findIndex((dayName) =>
+            new RegExp(`\\b${dayName}s?\\b`, 'i').test(lower)
+          );
+          if (foundDayIndex !== -1) {
+            const currentDayIndex = todayMidnight.getDay();
+            let diff = (foundDayIndex - currentDayIndex + 7) % 7;
+            if (diff === 0 && !/\bce\s+(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\b/i.test(lower)) {
+              diff = 7;
+            }
+            dateObj = new Date(todayMidnight);
+            dateObj.setDate(todayMidnight.getDate() + diff);
+          }
+        }
+
+        let dateRdv = null;
+        let jourLabel = null;
+        if (dateObj && !Number.isNaN(dateObj.getTime())) {
+          const y = dateObj.getFullYear();
+          const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const d = String(dateObj.getDate()).padStart(2, '0');
+          dateRdv = `${y}-${m}-${d}`;
+          const rawDay = dateObj.toLocaleDateString('fr-FR', { weekday: 'long' });
+          jourLabel = rawDay.charAt(0).toUpperCase() + rawDay.slice(1);
+        }
+
+        const resumeParts = [];
+        if (jourLabel) resumeParts.push(jourLabel);
+        if (dateRdv) {
+          const [y, m, d] = dateRdv.split('-');
+          resumeParts.push(`${d}/${m}/${y}`);
+        }
+        if (heureRdv) resumeParts.push(`à ${heureRdv}`);
+
+        const formattedSlot = resumeParts.length
+          ? resumeParts.join(' ') + (text ? ` (${text})` : '')
+          : (text || 'À définir');
+
+        return {
+          dateRdv,
+          heureRdv,
+          jourLabel,
+          formattedSlot,
+          rawText: text
+        };
       }
 
-      function updateSlotPreview() {
-        if (!slotDayText) return;
-        const label = formatSlotLabel(rdvDateInput?.value || '', rdvTimeInput?.value || '');
-        slotDayText.textContent = label.startsWith('Créneau agenda') ? label : `Créneau agenda : ${label}`;
-      }
-
-      rdvDateInput?.addEventListener('change', updateSlotPreview);
-      rdvTimeInput?.addEventListener('change', updateSlotPreview);
-
-      // Pop-up helpers
       const bookingModal = document.getElementById('booking-modal');
       const bookingModalBadge = document.getElementById('booking-modal-badge');
       const bookingModalTitle = document.getElementById('booking-modal-title');
@@ -1540,7 +1543,6 @@
         if (e.target === bookingModal) closeBookingModal();
       });
 
-      // Booking form submission -> Supabase wash_x_prestations (agenda CRM)
       const form = document.getElementById('booking-form');
       const submitBtn = document.getElementById('submit-booking-btn');
       const summaryOut = document.getElementById('summary-output');
@@ -1557,9 +1559,8 @@
         const contact = document.getElementById('client-contact').value.trim() || 'Non précisé';
         const vehicle = document.getElementById('vehicle-model').value.trim() || 'Non précisé';
         const formula = formulaSelect ? formulaSelect.value : 'Confort Intérieur (79 €)';
-        const rdvDate = rdvDateInput?.value || '';
-        const rdvTime = rdvTimeInput?.value || '';
-        const slotText = rdvDate || rdvTime ? formatSlotLabel(rdvDate, rdvTime) : 'À définir';
+        const slotRaw = preferredSlotInput?.value.trim() || '';
+        const parsed = parseSlotFromText(slotRaw);
         const notes = document.getElementById('interior-notes').value.trim() || 'Aucune précision particulière';
 
         return [
@@ -1567,7 +1568,7 @@
           `• Client : ${name} (${contact})`,
           `• Véhicule : ${vehicle}`,
           `• Formule : ${formula}`,
-          `• Créneau CRM : ${slotText}`,
+          `• Créneau CRM : ${parsed.formattedSlot}`,
           `• Détails intérieur : ${notes}`
         ].join('\n');
       }
@@ -1575,10 +1576,11 @@
       async function sendToSupabase(payload) {
         const baseUrl = (SUPABASE_CONFIG.url || '').trim().replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
         const apiKey = (SUPABASE_CONFIG.publishableKey || '').trim();
+        const parsed = parseSlotFromText(payload.preferredSlot);
 
-        const slotLabel = formatSlotLabel(payload.rdvDate, payload.rdvTime);
         const combinedNotes = [
-          payload.rdvDate || payload.rdvTime ? `Créneau demandé : ${slotLabel}` : null,
+          payload.preferredSlot ? `Disponibilité saisie : ${payload.preferredSlot}` : null,
+          parsed.jourLabel ? `Jour : ${parsed.jourLabel}` : null,
           payload.interiorNotes || null
         ].filter(Boolean).join(' | ') || null;
 
@@ -1592,8 +1594,8 @@
           tarif_eur: extractTarif(payload.formula),
           acompte_eur: 0,
           statut_paiement: 'À encaisser',
-          date_rdv: payload.rdvDate || null,
-          heure_rdv: payload.rdvTime || null,
+          date_rdv: parsed.dateRdv,
+          heure_rdv: parsed.heureRdv,
           statut_rdv: 'Planifié',
           notes_techniques: combinedNotes,
           source_validation: 'Site Web'
@@ -1626,31 +1628,29 @@
           clientContact: document.getElementById('client-contact')?.value.trim() || '',
           vehicleModel: document.getElementById('vehicle-model')?.value.trim() || '',
           formula: formulaSelect?.value || '',
-          rdvDate: rdvDateInput?.value || '',
-          rdvTime: rdvTimeInput?.value || '',
+          preferredSlot: preferredSlotInput?.value.trim() || '',
           interiorNotes: document.getElementById('interior-notes')?.value.trim() || ''
         };
 
-        const slotLabel = formatSlotLabel(payload.rdvDate, payload.rdvTime);
+        const parsed = parseSlotFromText(payload.preferredSlot);
 
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.textContent = 'Ajout à l\'agenda...';
+          submitBtn.textContent = 'Envoi en cours...';
         }
 
         try {
           await sendToSupabase(payload);
           if (summaryOut) {
             summaryOut.classList.add('confirmed');
-            summaryOut.textContent = `✅ Créneau inscrit dans l'agenda CRM (${slotLabel}).\n\n${text}`;
+            summaryOut.textContent = `✅ Créneau inscrit dans l'agenda CRM (${parsed.formattedSlot}).\n\n${text}`;
           }
           openBookingModal({
             badge: '● Ajouté à l\'agenda CRM',
             title: 'Rendez-vous enregistré',
-            message: `Merci ${payload.clientName || 'client'} ! Ton créneau du ${slotLabel} pour ${payload.vehicleModel || 'ton véhicule'} (${payload.formula}) est bien noté dans l'agenda du CRM.`
+            message: `Merci ${payload.clientName || 'client'} ! Ton créneau (${parsed.formattedSlot}) pour ${payload.vehicleModel || 'ton véhicule'} (${payload.formula}) est bien noté dans l'agenda du CRM.`
           });
           form.reset();
-          updateSlotPreview();
         } catch (err) {
           console.error('Erreur Supabase :', err);
           if (summaryOut) {
@@ -1660,12 +1660,12 @@
           openBookingModal({
             badge: '● Attention',
             title: 'Envoi direct indisponible',
-            message: `Le créneau n'a pas pu être ajouté directement à l'agenda. Tu peux copier le récapitulatif dans la zone de statut pour l'enregistrer manuellement.`
+            message: `La demande n'a pas pu être enregistrée directement. Tu peux copier le récapitulatif dans la zone de statut pour l'enregistrer manuellement.`
           });
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Envoyer et ajouter à l\'agenda';
+            submitBtn.textContent = 'Envoyer la demande';
           }
         }
       });
@@ -1686,7 +1686,6 @@
         }
       });
 
-      // Dynamic soap bubbles & interactive water droplets canvas
       const canvas = document.getElementById('droplet-canvas');
       const ctx = canvas ? canvas.getContext('2d') : null;
 
